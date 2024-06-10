@@ -32,7 +32,8 @@ function NavBar() {
           bookRoom!
         </a>
       </div>
-      <div className="navbar-links flex justify-center flex-grow">
+      <div className="flex-grow"></div>
+      <div className="navbar-links flex items-center">
         {auth == null ? (
           <>
             <div className="relative">
