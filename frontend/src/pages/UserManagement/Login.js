@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigate} from "react-router-dom"
+import { authenticate, logout } from "../../services/AuthenticationServices/AuthenticationServices"
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // Handle login logic here
         console.log('Login with:', email, password);
+        authenticate(email,password)
+          .then((data)=>{
+            console.log(data)
+            localStorage.setItem("auth", JSON.stringify(data.idToken))
+            navigate('/home');
+          })
+          .catch(err=>console.log(err))
     };
 
     return (

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { logout } from "../../services/AuthenticationServices/AuthenticationServices";
 
 function NavBar() {
   const [showSignupOptions, setShowSignupOptions] = useState(false);
-  const auth = localStorage.getItem("authToken"); // Example of fetching an auth token
+  const auth = localStorage.getItem("auth"); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Example of removing an auth token
-    navigate("/signup");
+    logout()
   };
 
   const handleSignup = () => {
@@ -20,8 +20,8 @@ function NavBar() {
     setShowSignupOptions(false);
   };
 
-  const handlePartnerRegistration = () => {
-    navigate("/partner/registration");
+  const handlePropertyAgentRegistration = () => {
+    navigate("/propertyagent/registration");
     setShowSignupOptions(false);
   };
 
@@ -29,7 +29,7 @@ function NavBar() {
     <nav className="bg-gray-800 flex justify-between items-center p-5">
       <div className="navbar-brand">
         <a href="/" className="text-white text-2xl font-bold no-underline">
-          bookRoom!
+          DalVacationHome
         </a>
       </div>
       <div className="flex-grow"></div>
@@ -53,9 +53,9 @@ function NavBar() {
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
-                    onClick={handlePartnerRegistration}
+                    onClick={handlePropertyAgentRegistration}
                   >
-                    Partner Signup
+                    Property Agent Signup
                   </button>
                 </div>
               )}

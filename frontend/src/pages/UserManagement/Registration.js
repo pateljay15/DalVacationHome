@@ -1,7 +1,10 @@
+import { CognitoUserAttribute } from "amazon-cognito-identity-js";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import userpool from '../../config/cognitoconfig/userpool';
 
 const Registration = ({ type }) => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -37,25 +40,64 @@ const Registration = ({ type }) => {
       setErrors({ confirmPassword: "Passwords do not match." });
       return;
     }
+    const attributeList = [];
+    let role = '0'
+    if (type == "propertyagent") {
+      role = '1'
+    }
     console.log("Form submitted:", { email, password });
+    attributeList.push(
+      new CognitoUserAttribute({
+        Name: 'email',
+        Value: email,
+      }),
+      new CognitoUserAttribute({
+        Name: 'custom:role',
+        Value: role,
+      }),
+      new CognitoUserAttribute({
+        Name: 'name',
+        Value: name
+      })
+    );
+    let username=email;
+    userpool.signUp(username, password, attributeList, null, (err, data) => {
+      if (err) {
+        console.log(err);
+        alert("Couldn't sign up");
+      } else {
+        console.log(data);
+        navigate('/verifyemail', { state: { username: username } });
+      }
+    });
   };
 
   const getTitle = () => {
-    return type === "user" ? "User Registration" : "Partner Registration";
+    return type === "user" ? "User Registration" : "Property Agent Registration";
   };
 
   const getAlternateRoute = () => {
-    return type === "user" ? "/partner/registration" : "/user/registration";
+    return type === "user" ? "/propertyagent/registration" : "/user/registration";
   };
 
   const getAlternateText = () => {
-    return type === "user" ? "Partner Signup" : "User Signup";
+    return type === "user" ? "Property Agent Signup" : "User Signup";
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">{getTitle()}</h1>
       <form onSubmit={handleSubmit}>
+      <div className="mb-4">
+          <label className="block text-gray-700">Name</label>
+          <input
+            type="text"
+            className="w-full px-3 py-2 border rounded-lg"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
         <div className="mb-4">
           <label className="block text-gray-700">Email</label>
           <input
