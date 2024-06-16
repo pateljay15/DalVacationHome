@@ -1,9 +1,10 @@
 import React from "react";
+import { Route, Routes } from "react-router-dom";
 import LandingPage from "../pages/LandingPage/LandingPage";
 import Login from "../pages/UserManagement/Login";
-import { Route, Routes } from "react-router-dom";
-
 import Registration from "../pages/UserManagement/Registration";
+import RoomManagement from "../pages/RoomManagement/RoomManagement";
+
 export const Router = () => {
   return (
     <Routes>
@@ -14,6 +15,7 @@ export const Router = () => {
         path="/partner/registration"
         element={<Registration type="partner" />}
       />
+      <Route path="/room-management" element={<RoomManagement />} />
     </Routes>
   );
 };
