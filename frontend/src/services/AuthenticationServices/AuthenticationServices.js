@@ -31,3 +31,28 @@ export const logout = () => {
     user.signOut();
     window.location.href = '/';
 };
+
+
+export const verifySecurityQuestionCheck = async (data) => {
+    try {
+        const response = await fetch(
+          "https://rcysppl364.execute-api.us-east-1.amazonaws.com/stage1/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+  
+        const data = await response.json();
+        
+        console.log(data);
+        return data
+
+    } catch (error) {
+        console.error(data);
+        alert("security question do not match");
+    }
+}

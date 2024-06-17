@@ -14,8 +14,9 @@ function Login() {
         authenticate(email,password)
           .then((data)=>{
             console.log(data)
-            localStorage.setItem("auth", JSON.stringify(data.idToken))
-            navigate('/home');
+            // localStorage.setItem("auth", JSON.stringify(data.idToken))
+            // navigate('/home');
+            navigate("/verifysecurityanswer", { state: { username: email, auth : data.idToken } });
           })
           .catch(err=>console.log(err))
     };
