@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { lexRuntime } from '../../aws-config';
 import './ChatBot.css'
-import { REACT_APP_LEX_BOT_ALIAS, REACT_APP_LEX_BOT_NAME } from 'react-dotenv';
 
 const ChatBot = () => {
-    const [messages, setMessages] = useState([])
-    const [input, setInput] = useState('')
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState('');
+    const chatWindowRef = useRef(null);
+
+    useEffect(() => {
+        if (chatWindowRef.current) {
+            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+        }
+    }, [messages]);
 
     const handleSendMessage = async () => {
         if (input.trim() === '') return;
@@ -15,11 +21,11 @@ const ChatBot = () => {
         setInput('');
 
         const params = {
-            botAlias: REACT_APP_LEX_BOT_ALIAS,
-            botName: REACT_APP_LEX_BOT_NAME,
+            botAlias: process.env.REACT_APP_LEX_BOT_ALIAS,
+            botName: process.env.REACT_APP_LEX_BOT_NAME,
             inputText: input,
-            userId: Date.now.toString(),
-          };
+            userId: Date.now().toString(),
+        };
 
         try {
             const response = await lexRuntime.postText(params).promise();
@@ -29,29 +35,33 @@ const ChatBot = () => {
             setMessages([...newMessages, { text: 'Error communicating with Lex', sender: 'bot' }]);
         }
     }
-    
-    return ( 
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
+        }
+    }
+
+    return (
         <div className="chatbot-container">
-            <div className="chatbot-window">
-                {
-                    messages.map((message, index) => (
-                        <div key={index} className={message.sender}>
-                            {message.text}
-                        </div>
-                    ))
-                }
+            <div className="chatbot-window" ref={chatWindowRef}>
+                {messages.map((message, index) => (
+                    <div key={index} className={message.sender}>
+                        {message.text}
+                    </div>
+                ))}
             </div>
-
-            <input 
-                type="text" 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage}
-            />
-
-            <button onClick={handleSendMessage}>Send</button>
+            <div className="input-container">
+                <input 
+                    type="text" 
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                />
+                <button onClick={handleSendMessage}>Send</button>
+            </div>
         </div>
-     )
+    );
 }
- 
-export default ChatBot
+
+export default ChatBot;
