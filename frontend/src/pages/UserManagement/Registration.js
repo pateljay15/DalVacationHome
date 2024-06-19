@@ -10,6 +10,7 @@ const Registration = ({ type }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [securityAnswer, setSecurityAnswer] = useState("");
+  const [shiftKey, setShiftKey] = useState("");
 
   const navigate = useNavigate();
 
@@ -48,12 +49,17 @@ const Registration = ({ type }) => {
       return;
     }
 
+    if (!shiftKey) {
+      setErrors({ shiftKey: "Shift Key is required." });
+      return;
+    }
+
     const attributeList = [];
     let role = "0";
     if (type == "propertyagent") {
       role = "1";
     }
-    console.log("Form submitted:", { email, password });
+    console.log("Form submitted:", { email, password, shiftKey });
     attributeList.push(
       new CognitoUserAttribute({
         Name: "email",
@@ -76,7 +82,13 @@ const Registration = ({ type }) => {
       } else {
         console.log(data);
         //navigate("/verifyemail", { state: { username: username } });
-        storeUserDetailsInDynamoDB({ email, name, role, securityAnswer });
+        storeUserDetailsInDynamoDB({
+          email,
+          name,
+          role,
+          securityAnswer,
+          shiftKey,
+        });
       }
     });
   };
@@ -183,6 +195,21 @@ const Registration = ({ type }) => {
             <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
           )}
         </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700">Shift Key</label>
+          <input
+            type="text"
+            className="w-full px-3 py-2 border rounded-lg"
+            value={shiftKey}
+            onChange={(e) => setShiftKey(e.target.value)}
+            required
+          />
+          {errors.shiftKey && (
+            <p className="text-red-500 text-sm">{errors.shiftKey}</p>
+          )}
+        </div>
+
         <div className="mb-4">
           <label className="block text-gray-700 text-lg font-bold">
             Security Question

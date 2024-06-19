@@ -2,12 +2,14 @@ const AWS = require("aws-sdk");
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event) => {
-  console.log(event);
+  const { email, name, role, securityAnswer, shiftKey } = event;
 
-  const { email, name, role, securityAnswer } = event;
-
-  console.log("****");
-  console.log("email", email);
+  if (!email || !name || !role || !securityAnswer || !shiftKey) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Missing required fields" }),
+    };
+  }
 
   const params = {
     TableName: "Users",
@@ -16,6 +18,7 @@ exports.handler = async (event) => {
       name: name,
       role: role,
       securityAnswer: securityAnswer,
+      shiftKey: shiftKey,
     },
   };
 
