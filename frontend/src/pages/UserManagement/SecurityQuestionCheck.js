@@ -17,19 +17,22 @@ const SecurityQuestionCheck = () => {
 
     let state = location.state
     let data = {
-        answer: answer,
         email: state.username,
     };
 
-    // verifySecurityQuestionCheck(data)
-    // .then(data => {
-    //     console.log(data)
-    //     navigate("/verifycaptcha", { state: { username: state.username, auth : state.auth } });
-    // })
-    // .catch(err => {
-    //     console.log(err)
-    // })
-    navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
+    verifySecurityQuestionCheck(data)
+    .then(data => {
+        console.log(data)
+        let body = JSON.parse(data.body)
+        if (body.securityAnswer == answer) {
+            console.log(data)
+            navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
+        }
+    })
+    .catch(err => {
+        console.log(err)
+    })
+    // navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
   };
 
   return (

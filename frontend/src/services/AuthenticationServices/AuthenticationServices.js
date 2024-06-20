@@ -36,7 +36,7 @@ export const logout = () => {
 export const verifySecurityQuestionCheck = async (data) => {
     try {
         const response = await fetch(
-          "https://rcysppl364.execute-api.us-east-1.amazonaws.com/stage1/register",
+          "https://rcysppl364.execute-api.us-east-1.amazonaws.com/stage1/getSecurityAnswer",
           {
             method: "POST",
             headers: {
@@ -46,13 +46,38 @@ export const verifySecurityQuestionCheck = async (data) => {
           }
         );
   
-        const data = await response.json();
+        const res = await response.json();
         
-        console.log(data);
-        return data
+        console.log(res);
+        return res
 
     } catch (error) {
-        console.error(data);
+        console.error(error);
         alert("security question do not match");
+    }
+}
+
+
+export const verifyCeaserCipher = async (data) => {
+    try {
+        const response = await fetch(
+          "https://rcysppl364.execute-api.us-east-1.amazonaws.com/stage1/getShiftKey",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+  
+        const res = await response.json();
+        
+        console.log(res);
+        return res
+
+    } catch (error) {
+        console.error(error);
+        alert("No Shift Key available");
     }
 }

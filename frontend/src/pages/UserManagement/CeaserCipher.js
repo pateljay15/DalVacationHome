@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { verifyCeaserCipher } from '../../services/AuthenticationServices/AuthenticationServices';
 
 const CaesarCipher = () => {
   const navigate = useNavigate();
@@ -7,15 +8,26 @@ const CaesarCipher = () => {
   const [originalText, setOriginalText] = useState('');
   const [userInput, setUserInput] = useState('');
   const [error, setError] = useState('');
-  const shift = 3; // Caesar cipher shift
+  // const shift = 3; // Caesar cipher shift
   const location = useLocation()
   // Effect to cipher text when the component mounts
   useEffect(() => {
     const original = generateRandomText(4); // Generate random 4-char text
     console.log(original)
     setOriginalText(original)
-    const ciphered = applyCipher(original, shift);
-    setCipherText(ciphered);
+
+    verifyCeaserCipher({ email: location.state.email })
+    .then(data => {
+      console.log(data)
+        let body = JSON.parse(data.body)
+        if (body.shiftKey !== null) {
+          const ciphered = applyCipher(original, body.shiftKey);
+          setCipherText(ciphered);
+        }
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }, []);
 
   // Function to generate random 4-char text
