@@ -8,27 +8,29 @@ const CaesarCipher = () => {
   const [originalText, setOriginalText] = useState('');
   const [userInput, setUserInput] = useState('');
   const [error, setError] = useState('');
-  // const shift = 3; // Caesar cipher shift
-  const location = useLocation()
-  // Effect to cipher text when the component mounts
-  useEffect(() => {
-    const original = generateRandomText(4); // Generate random 4-char text
-    console.log(original)
-    setOriginalText(original)
+  const location = useLocation();
+  const [hasMounted, setHasMounted] = useState(false);
 
-    verifyCeaserCipher({ email: location.state.email })
-    .then(data => {
-      console.log(data)
-        let body = JSON.parse(data.body)
-        if (body.shiftKey !== null) {
-          const ciphered = applyCipher(original, body.shiftKey);
-          setCipherText(ciphered);
-        }
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }, []);
+  useEffect(() => {
+    if (!hasMounted) {
+      setHasMounted(true);
+      verifyCeaserCipher({ email: location.state.username })
+        .then(response => {
+          let body = JSON.parse(response.body);
+          if (body.shiftKey !== null) {
+            const original = generateRandomText(4); // Generate random 4-char text
+            console.log("original",original)
+            setOriginalText(original);
+            const ciphered = applyCipher(original, parseInt(body.shiftKey));
+            console.log("cipher",ciphered)
+            setCipherText(ciphered);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [hasMounted, location.state.username]);
 
   // Function to generate random 4-char text
   function generateRandomText(length) {
@@ -53,7 +55,7 @@ const CaesarCipher = () => {
     e.preventDefault();
     if (userInput.toUpperCase() === originalText) {
       alert('Correct! Well done.');
-      console.log(location.state)
+      localStorage.setItem("auth", JSON.stringify(location.state));
       navigate('/home'); // or another appropriate route
     } else {
       setError('Incorrect. Please try again.');

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { verifySecurityQuestionCheck } from '../../services/AuthenticationServices/AuthenticationServices';
+import { verifyCeaserCipher, verifySecurityQuestionCheck } from '../../services/AuthenticationServices/AuthenticationServices';
 
 const SecurityQuestionCheck = () => {
   const [answer, setAnswer] = useState('');
@@ -25,8 +25,8 @@ const SecurityQuestionCheck = () => {
         console.log(data)
         let body = JSON.parse(data.body)
         if (body.securityAnswer == answer) {
-            console.log(data)
-            navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
+          console.log(data)
+          navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
         }
     })
     .catch(err => {
