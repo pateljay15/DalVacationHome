@@ -7,7 +7,7 @@ function Home() {
   const [showForm, setShowForm] = useState(false);
   const auth = getAuthenticationToken()
   // console.log(auth)
-  const role = auth.auth.payload["custom:role"]
+  const role = auth?.auth?.payload["custom:role"]
 
   return (
     <div className="bg-gray-100">
@@ -28,7 +28,7 @@ function Home() {
       )}
 
       {/* Button fixed at the bottom right of the screen */}
-      { (<button
+      {role === "1" && (<button
         className="fixed bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-20"
         onClick={() => setShowForm(!showForm)}
       >

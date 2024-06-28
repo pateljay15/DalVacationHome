@@ -1,17 +1,25 @@
 // src/components/RoomForm/RoomForm.js
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { postData } from '../../services/RoomManagementServices/RoomManagementServices';
+import { getAuthenticationToken } from '../../services/AuthenticationServices/AuthenticationServices';
 
 const RoomForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     roomNumber: '',
     price: '',
     discount: '',
-    imageUrl: '',
+    image: '',
     roomType: 'Recreation Room', // Default to 'Recreation Room'
     description: '',
     features: '',
-    availability: ''
+    availability: '',
+    fileName: ''
   });
+
+  const auth = getAuthenticationToken()
+  // console.log(auth)
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,23 +34,50 @@ const RoomForm = ({ onSubmit }) => {
     // Convert features from string to array
     const formattedData = {
       ...formData,
+      roomid: uuidv4(),
       price: parseFloat(formData.price),
       discount: parseFloat(formData.discount),
       availability: parseInt(formData.availability, 10),
-      features: formData.features.split(',').map(feature => feature.trim())
+      features: formData.features.split(',').map(feature => feature.trim()),
+      propertyAgent: auth.auth.payload["email"]
     };
-    onSubmit(formattedData);
-    setFormData({
-      roomNumber: '',
-      price: '',
-      discount: '',
-      imageUrl: '',
-      roomType: 'Recreation Room', // Reset to default
-      description: '',
-      features: '',
-      availability: ''
-    });
+    console.log(formattedData)
+    postData(formattedData)
+    .then(res => {
+      console.log(res)
+      // if (res.statusCode == 200) {
+        // console.log(res)
+        setFormData({
+          roomNumber: '',
+          price: '',
+          discount: '',
+          image: '',
+          roomType: 'Recreation Room', // Reset to default
+          description: '',
+          features: '',
+          availability: '',
+          fileName: '',
+        });
+      // }
+    })
+    .catch(err => console.log(err))
   };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            if (reader.result) {
+                let img = reader.result.toString()
+                let dam = img.split(",")
+                console.log(dam[1])
+                setFormData({...formData, image: dam[1], fileName: file.name })
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+};
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md max-w-full">
@@ -84,10 +119,10 @@ const RoomForm = ({ onSubmit }) => {
         <div className="flex flex-col">
           <label className="block text-gray-700 mb-1">Image URL</label>
           <input
-            type="text"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleFileChange}
             className="border border-gray-300 rounded px-3 py-2"
             required
           />

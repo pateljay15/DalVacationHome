@@ -6,7 +6,7 @@ const RoomCard = ({ room }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/rooms/${room.id}`);
+    navigate(`/rooms/${room.roomid}`);
   };
 
   return (

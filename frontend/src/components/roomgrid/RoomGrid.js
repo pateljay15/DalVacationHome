@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import RoomCard from "./RoomCard";
 import { roomsData } from "./dummydata";
+import { fetchRooms } from "../../services/RoomManagementServices/RoomManagementServices";
 
 // Dummy data for room details
 // const roomsData = [
@@ -11,11 +12,23 @@ import { roomsData } from "./dummydata";
 //   ];
 
 const RoomGrid = () => {
+    const [roomsData, setRoomsData] = useState([])
+
+    useEffect(() => {
+        fetch('https://fa7721ywbk.execute-api.us-east-1.amazonaws.com/room', {
+            method: "GET"
+        })
+        .then(data => data.json())
+        .then(users => setRoomsData(users))
+        .catch(err => console.log(err));
+
+    }, [])
+
   return (
     <div className="p-4">
       <div className="grid grid-cols-3 gap-4">
-        {roomsData.map(room => (
-          <RoomCard key={room.id} room={room} />
+        {roomsData.length > 0 && roomsData.map(room => (
+          <RoomCard key={room.roomid} room={room} />
         ))}
       </div>
     </div>
