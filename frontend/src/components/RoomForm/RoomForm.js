@@ -1,105 +1,150 @@
-import React, { useState } from "react";
+// src/components/RoomForm/RoomForm.js
+import React, { useState } from 'react';
 
-const RoomForm = () => {
+const RoomForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
-    roomNumber: "",
-    roomType: "",
-    features: "",
-    price: "",
-    discountCode: "",
+    roomNumber: '',
+    price: '',
+    discount: '',
+    imageUrl: '',
+    roomType: 'Recreation Room', // Default to 'Recreation Room'
+    description: '',
+    features: '',
+    availability: ''
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value
     });
-  };
-
-  const handlePriceChange = (e) => {
-    const value = e.target.value;
-    if (value >= 0) {
-      setFormData({
-        ...formData,
-        price: value,
-      });
-    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    // Convert features from string to array
+    const formattedData = {
+      ...formData,
+      price: parseFloat(formData.price),
+      discount: parseFloat(formData.discount),
+      availability: parseInt(formData.availability, 10),
+      features: formData.features.split(',').map(feature => feature.trim())
+    };
+    onSubmit(formattedData);
+    setFormData({
+      roomNumber: '',
+      price: '',
+      discount: '',
+      imageUrl: '',
+      roomType: 'Recreation Room', // Reset to default
+      description: '',
+      features: '',
+      availability: ''
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label className="block text-gray-700">Room Number</label>
-        <input
-          type="text"
-          name="roomNumber"
-          value={formData.roomNumber}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border rounded"
-          required
-        />
+    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md max-w-full">
+      <h2 className="text-2xl font-bold mb-4">Create Room</h2>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Room Number</label>
+          <input
+            type="text"
+            name="roomNumber"
+            value={formData.roomNumber}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Price</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Discount (%)</label>
+          <input
+            type="number"
+            name="discount"
+            value={formData.discount}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Image URL</label>
+          <input
+            type="text"
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Room Type</label>
+          <select
+            name="roomType"
+            value={formData.roomType}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            required
+          >
+            <option value="Recreation Room">Recreation Room</option>
+            <option value="Deluxe Room">Deluxe Room</option>
+            <option value="Standard Room">Standard Room</option>
+          </select>
+        </div>
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Availability</label>
+          <input
+            type="number"
+            name="availability"
+            value={formData.availability}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Room Type</label>
-        <select
-          name="roomType"
-          value={formData.roomType}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border rounded"
-          required
-        >
-          <option value="">Select Room Type</option>
-          <option value="Single Room">Single Room</option>
-          <option value="Double Room">Double Room</option>
-          <option value="Suite">Suite</option>
-          <option value="Recreation Room">Recreation Room</option>
-        </select>
+      <div className="grid grid-cols-1 gap-4">
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            rows="4"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="block text-gray-700 mb-1">Features (comma-separated)</label>
+          <input
+            type="text"
+            name="features"
+            value={formData.features}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2"
+            required
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Features</label>
-        <textarea
-          name="features"
-          value={formData.features}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border rounded"
-          required
-        ></textarea>
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Price</label>
-        <input
-          type="number"
-          name="price"
-          value={formData.price}
-          onChange={handlePriceChange}
-          className="w-full mt-2 p-2 border rounded"
-          required
-          min="0"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Discount Code</label>
-        <input
-          type="text"
-          name="discountCode"
-          value={formData.discountCode}
-          onChange={handleChange}
-          className="w-full mt-2 p-2 border rounded"
-        />
-      </div>
-      <div className="text-right">
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Submit
-        </button>
-      </div>
+      <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+        Submit
+      </button>
     </form>
   );
 };

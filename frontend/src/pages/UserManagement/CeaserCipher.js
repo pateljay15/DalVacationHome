@@ -56,7 +56,7 @@ const CaesarCipher = () => {
     if (userInput.toUpperCase() === originalText) {
       alert('Correct! Well done.');
       localStorage.setItem("auth", JSON.stringify(location.state));
-      navigate('/home'); // or another appropriate route
+      navigate('/'); // or another appropriate route
     } else {
       setError('Incorrect. Please try again.');
     }

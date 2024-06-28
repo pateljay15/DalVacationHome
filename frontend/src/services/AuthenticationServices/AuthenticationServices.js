@@ -81,3 +81,9 @@ export const verifyCeaserCipher = async (data) => {
         alert("No Shift Key available");
     }
 }
+
+export const getAuthenticationToken = () => {
+    let authData = localStorage.getItem("auth")
+
+    return authData ? JSON.parse(authData) : null
+}
