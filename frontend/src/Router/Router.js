@@ -9,6 +9,8 @@ import SecurityQuestionCheck from "../pages/UserManagement/SecurityQuestionCheck
 import CeaserCipher from "../pages/UserManagement/CeaserCipher";
 import RoomDetail from "../components/roomgrid/RoomDetail";
 import { roomsData } from "../components/roomgrid/dummydata";
+import MyBookingPage from "../pages/MyBooking/MyBookingPage";
+import BookingDetailPage from "../pages/MyBooking/BookingDetailPage";
 
 // const roomsData = [
 //   { id: 1, roomNumber: "101", price: "$50", imageUrl: "https://en.idei.club/uploads/posts/2023-08/thumbs/1691227156_en-idei-club-p-simple-hotel-room-images-dizain-vkontakte-32.jpg", features: ["Free Wi-Fi", "Air Conditioning", "Breakfast Included"] },
@@ -30,7 +32,9 @@ export const Router = () => {
       <Route path="/verifyemail" element={<VerificationEmail />} />
       <Route path="/verifysecurityanswer" element={<SecurityQuestionCheck />} />
       <Route path="/verifyceasercipher" element={<CeaserCipher />} />
-      <Route path="/rooms/:roomId" element={<RoomDetail roomsData={roomsData} />} />
+      <Route path="/rooms/:roomId" element={<RoomDetail />} />
+      <Route path="/mybookings" element={<MyBookingPage />} />
+      <Route path="/booking/:bookingId" element={<BookingDetailPage />} />
     </Routes>
   );
 };

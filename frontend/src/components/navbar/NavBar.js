@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { logout } from "../../services/AuthenticationServices/AuthenticationServices";
+import { getAuthenticationToken, logout } from "../../services/AuthenticationServices/AuthenticationServices";
 
 function NavBar() {
   const [showSignupOptions, setShowSignupOptions] = useState(false);
-  const auth = localStorage.getItem("auth"); 
+  const auth = getAuthenticationToken()
+  const role = auth?.auth?.payload["custom:role"]
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout()
+    logout();
+    localStorage.removeItem("auth"); // Ensure auth is cleared
+    navigate("/");
   };
 
   const handleSignup = () => {
@@ -26,19 +29,45 @@ function NavBar() {
   };
 
   return (
-    <nav className="bg-gray-800 flex justify-between items-center p-5">
+    <nav className="bg-gray-900 flex justify-between items-center p-5 shadow-lg">
       <div className="navbar-brand">
-        <a href="/" className="text-white text-2xl font-bold no-underline">
+        <NavLink
+          to="/"
+          className="text-white text-2xl font-bold no-underline hover:text-yellow-400"
+        >
           DalVacationHome
-        </a>
+        </NavLink>
       </div>
-      <div className="flex-grow"></div>
-      <div className="navbar-links flex items-center">
+      <div className="flex-grow flex justify-center items-center space-x-6">
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "text-yellow-400 text-lg font-bold no-underline"
+              : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+          }
+          to="/"
+        >
+          Home
+        </NavLink>
+        {auth && role === "0" && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 text-lg font-bold no-underline"
+                : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+            }
+            to="/mybookings"
+          >
+            MyBookings
+          </NavLink>
+        )}
+      </div>
+      <div className="navbar-links flex items-center space-x-6">
         {auth == null ? (
           <>
             <div className="relative">
               <span
-                className="text-white text-lg font-bold no-underline mx-3 cursor-pointer"
+                className="text-white text-lg font-bold no-underline cursor-pointer hover:text-yellow-400"
                 onClick={handleSignup}
               >
                 Signup
@@ -63,8 +92,8 @@ function NavBar() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? "text-white text-lg font-bold no-underline mx-3 border-b-2 border-yellow-400"
-                  : "text-white text-lg font-bold no-underline mx-3"
+                  ? "text-yellow-400 text-lg font-bold no-underline"
+                  : "text-white text-lg font-bold no-underline hover:text-yellow-400"
               }
               to="/user/login"
             >
@@ -73,7 +102,7 @@ function NavBar() {
           </>
         ) : (
           <span
-            className="text-white text-lg font-bold no-underline mx-3 hover:text-yellow-400 cursor-pointer"
+            className="text-white text-lg font-bold no-underline hover:text-yellow-400 cursor-pointer"
             onClick={handleLogout}
           >
             Logout

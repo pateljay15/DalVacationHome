@@ -13,7 +13,6 @@ const RoomForm = ({ onSubmit }) => {
     roomType: 'Recreation Room', // Default to 'Recreation Room'
     description: '',
     features: '',
-    availability: '',
     fileName: ''
   });
 
@@ -37,7 +36,6 @@ const RoomForm = ({ onSubmit }) => {
       roomid: uuidv4(),
       price: parseFloat(formData.price),
       discount: parseFloat(formData.discount),
-      availability: parseInt(formData.availability, 10),
       features: formData.features.split(',').map(feature => feature.trim()),
       propertyAgent: auth.auth.payload["email"]
     };
@@ -55,7 +53,6 @@ const RoomForm = ({ onSubmit }) => {
           roomType: 'Recreation Room', // Reset to default
           description: '',
           features: '',
-          availability: '',
           fileName: '',
         });
       // }
@@ -140,17 +137,6 @@ const RoomForm = ({ onSubmit }) => {
             <option value="Deluxe Room">Deluxe Room</option>
             <option value="Standard Room">Standard Room</option>
           </select>
-        </div>
-        <div className="flex flex-col">
-          <label className="block text-gray-700 mb-1">Availability</label>
-          <input
-            type="number"
-            name="availability"
-            value={formData.availability}
-            onChange={handleChange}
-            className="border border-gray-300 rounded px-3 py-2"
-            required
-          />
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4">
