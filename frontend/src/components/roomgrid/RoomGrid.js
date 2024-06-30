@@ -12,24 +12,32 @@ import { fetchRooms } from "../../services/RoomManagementServices/RoomManagement
 //   ];
 
 const RoomGrid = () => {
-    const [roomsData, setRoomsData] = useState([])
+  const [roomsData, setRoomsData] = useState([]);
 
-    useEffect(() => {
-        fetch('https://fa7721ywbk.execute-api.us-east-1.amazonaws.com/room', {
-            method: "GET"
-        })
-        .then(data => data.json())
-        .then(users => setRoomsData(users))
-        .catch(err => console.log(err));
+  useEffect(() => {
+    fetch("https://fa7721ywbk.execute-api.us-east-1.amazonaws.com/room", {
+      method: "GET",
+    })
+      .then((data) => data.json())
+      .then((users) => setRoomsData(users))
+      .catch((err) => console.log(err));
+  }, []);
 
-    }, [])
+  const handleDeleteRoom = (roomId) => {
+    setRoomsData(roomsData.filter((room) => room.roomid !== roomId));
+  };
 
   return (
     <div className="p-4">
       <div className="grid grid-cols-3 gap-4">
-        {roomsData.length > 0 && roomsData.map(room => (
-          <RoomCard key={room.roomid} room={room} />
-        ))}
+        {roomsData.length > 0 &&
+          roomsData.map((room) => (
+            <RoomCard
+              key={room.roomid}
+              room={room}
+              onDelete={handleDeleteRoom}
+            />
+          ))}
       </div>
     </div>
   );
