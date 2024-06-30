@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const RoomCard = ({ room, onDelete }) => {
+const RoomCard = ({ room, onDelete, onEdit }) => {
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
@@ -46,6 +46,12 @@ const RoomCard = ({ room, onDelete }) => {
         className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         View Details
+      </button>
+      <button
+        onClick={() => onEdit(room)}
+        className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Update
       </button>
       <button
         onClick={handleDelete}
