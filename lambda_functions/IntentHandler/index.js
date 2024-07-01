@@ -7,30 +7,26 @@ exports.handler = async (event) => {
         if (typeof event.body === 'string') {
             body = JSON.parse(event.body);
         } else {
-            body = event.body; // Assuming API Gateway Lambda proxy integration
+            body = event.body; 
         }
 
-        const intentDisplayName = body.queryResult.intent.displayName;
+        const parameters = body.queryResult.parameters;
+        console.log(`Event body received from bot: ${JSON.stringify(body)}`);
+        console.log(`Parameters passed by bot: ${JSON.stringify(parameters)}`);
 
-        console.log(`IntentHandler Lambda triggered by API with intent: ${intentDisplayName}`);
+        const bookingId = parameters.BookingReferenceCode;
+        console.log(`1. Booking ID passed from user: ${bookingId}`);
 
-        let responseMessage;
-        
-        switch (intentDisplayName) {
-            case 'Booking Info Intent':
-                responseMessage = await invokeLambda('FetchBookingDetails', body.queryResult.parameters);
-                break;
-            case 'Customer Support Request Intent':
-                responseMessage = handleCustomerSupportRequestIntent(body.queryResult.parameters);
-                break;
-            default:
-                responseMessage = 'Sorry, I did not understand that request.';
-        }
+        const responseMessage = await invokeLambda('FetchBookingDetails', { bookingId });
+
+        console.log(`2. Room number: ${responseMessage.roomNumber}`);
+        console.log(`3. Duration of stay: ${responseMessage.duration}`);
+        console.log(`4. Message to user: ${responseMessage.fulfillmentText}`);
 
         const response = {
             statusCode: 200,
             body: JSON.stringify({
-                fulfillmentText: responseMessage // Pass the response message to Dialogflow
+                fulfillmentText: responseMessage.fulfillmentText
             })
         };
 
@@ -57,15 +53,11 @@ async function invokeLambda(functionName, parameters) {
     try {
         const data = await lambda.invoke(params).promise();
         const responsePayload = JSON.parse(data.Payload);
-        return responsePayload.fulfillmentText; // Return the fulfillmentText from FetchBookingDetails
+        return responsePayload; 
     } catch (error) {
         console.error(`Error invoking ${functionName} Lambda:`, error);
-        return 'There was an error processing your request. Please try again later.';
+        return {
+            fulfillmentText: 'There was an error processing your request. Please try again later.'
+        };
     }
-}
-
-function handleCustomerSupportRequestIntent(parameters) {
-    const issueDescription = parameters.IssueDescription;
-    console.log("Customer Support Request Intent");
-    return `We have received your request regarding: ${issueDescription}. Our support team will contact you shortly.`;
 }
