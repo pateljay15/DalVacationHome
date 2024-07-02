@@ -12,14 +12,16 @@ exports.handler = async (event) => {
 
         const parameters = body.queryResult.parameters;
         const intentName = body.queryResult.intent.displayName;
+        const userRole = body.originalDetectIntentRequest.payload.userRole || 'guest';
 
         console.log(`Event body received from bot: ${JSON.stringify(body)}`);
         console.log(`Parameters passed by bot: ${JSON.stringify(parameters)}`);
         console.log(`Intent triggered: ${intentName}`);
+        console.log(`User role: ${userRole}`);
 
         let responseMessage;
         
-        if (intentName === 'Booking Info Intent') {
+        if (intentName === 'Booking Info Intent' && (userRole === 'user' || userRole === 'admin')) {
             const bookingId = parameters.BookingReferenceCode;
             console.log(`1. Booking ID passed from user: ${bookingId}`);
 
@@ -28,14 +30,17 @@ exports.handler = async (event) => {
             console.log(`2. Room number: ${responseMessage.roomNumber}`);
             console.log(`3. Duration of stay: ${responseMessage.duration}`);
             console.log(`4. Message to user: ${responseMessage.fulfillmentText}`);
-        } else if (intentName === 'Customer Support Request Intent') {
+        } else if (intentName === 'Customer Support Request Intent' && (userRole === 'user' || userRole === 'admin')) {
             const issue = parameters.Issue || '';
             const bookingReferenceCode = parameters.BookingReferenceCode || '';
             responseMessage = await invokeLambda('HandoffSupportRequest', { Issue: issue, BookingReferenceCode: bookingReferenceCode });
 
             console.log(`Response from HandoffSupportRequest: ${responseMessage.fulfillmentText}`);
+        } else if (intentName === 'Navigation Intent') {
+            // Handle navigation intent
+            responseMessage = { fulfillmentText: 'Navigation handled' };
         } else {
-            return createResponse('Sorry, I did not understand that request.');
+            responseMessage = { fulfillmentText: 'Sorry, you do not have the necessary permissions for this request.' };
         }
 
         return createResponse(responseMessage.fulfillmentText);
