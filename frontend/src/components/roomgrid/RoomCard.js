@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
 
-const RoomCard = ({ room, onDelete }) => {
+const RoomCard = ({ room, onDelete, onEdit }) => {
   const navigate = useNavigate();
   const auth = getAuthenticationToken()
   const role = auth?.auth?.payload["custom:role"]
@@ -50,14 +50,18 @@ const RoomCard = ({ room, onDelete }) => {
       >
         View Details
       </button>
-      {role == "1" && (
-        <button
+      <button
+        onClick={() => onEdit(room)}
+        className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Update
+      </button>
+      <button
         onClick={handleDelete}
         className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
       >
         Delete
       </button>
-      )}
       
     </div>
   );

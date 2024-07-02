@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import RoomCard from "./RoomCard";
 import { roomsData } from "./dummydata";
 import { fetchRooms } from "../../services/RoomManagementServices/RoomManagementServices";
+import UpdateRoomForm from "../RoomForm/updateRoomForm";
 
 // Dummy data for room details
 // const roomsData = [
@@ -13,6 +14,7 @@ import { fetchRooms } from "../../services/RoomManagementServices/RoomManagement
 
 const RoomGrid = () => {
   const [roomsData, setRoomsData] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
   useEffect(() => {
     fetch("https://fa7721ywbk.execute-api.us-east-1.amazonaws.com/room", {
@@ -27,6 +29,19 @@ const RoomGrid = () => {
     setRoomsData(roomsData.filter((room) => room.roomid !== roomId));
   };
 
+  const handleUpdateRoom = (updatedRoom) => {
+    setRoomsData(
+      roomsData.map((room) =>
+        room.roomid === updatedRoom.roomid ? updatedRoom : room
+      )
+    );
+    setSelectedRoom(null);
+  };
+
+  const handleEditRoom = (room) => {
+    setSelectedRoom(room);
+  };
+
   return (
     <div className="p-4">
       <div className="grid grid-cols-3 gap-4">
@@ -36,9 +51,18 @@ const RoomGrid = () => {
               key={room.roomid}
               room={room}
               onDelete={handleDeleteRoom}
+              onEdit={handleEditRoom}
             />
           ))}
       </div>
+
+      {selectedRoom && (
+        <UpdateRoomForm
+          room={selectedRoom}
+          onUpdate={handleUpdateRoom}
+          onClose={() => setSelectedRoom(null)}
+        />
+      )}
     </div>
   );
 };
