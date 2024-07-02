@@ -120,7 +120,7 @@ const RoomDetail = () => {
           >
             Back
           </button>
-          {room.availability == true && (
+          {room.availability == true && role == "0" && (
               <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
               onClick={() => setShowBookingForm(true)}

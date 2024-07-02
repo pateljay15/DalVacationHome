@@ -1,8 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
 
 const RoomCard = ({ room, onDelete }) => {
   const navigate = useNavigate();
+  const auth = getAuthenticationToken()
+  const role = auth?.auth?.payload["custom:role"]
 
   const handleViewDetails = () => {
     navigate(`/rooms/${room.roomid}`);
@@ -47,12 +50,15 @@ const RoomCard = ({ room, onDelete }) => {
       >
         View Details
       </button>
-      <button
+      {role == "1" && (
+        <button
         onClick={handleDelete}
         className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
       >
         Delete
       </button>
+      )}
+      
     </div>
   );
 };
