@@ -3,18 +3,11 @@ import "./ChatBot.css";
 
 const ChatBot = () => {
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      "https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1";
-    script.async = true;
-    document.body.appendChild(script);
-
     const userRole = localStorage.getItem("userRole") || "guest";
 
-    script.addEventListener("load", () => {
-      const dfMessenger = document.querySelector("df-messenger");
-      dfMessenger.addEventListener("df-messenger-loaded", function () {
-        const iframe = document.querySelector("df-messenger iframe");
+    const handleMessengerLoaded = () => {
+      const iframe = document.querySelector("df-messenger iframe");
+      if (iframe && iframe.contentWindow) {
         iframe.contentWindow.postMessage(
           {
             event: "open",
@@ -22,11 +15,24 @@ const ChatBot = () => {
           },
           "*"
         );
-      });
-    });
+      }
+    };
+
+    const dfMessenger = document.querySelector("df-messenger");
+    if (dfMessenger) {
+      dfMessenger.addEventListener(
+        "df-messenger-loaded",
+        handleMessengerLoaded
+      );
+    }
 
     return () => {
-      document.body.removeChild(script);
+      if (dfMessenger) {
+        dfMessenger.removeEventListener(
+          "df-messenger-loaded",
+          handleMessengerLoaded
+        );
+      }
     };
   }, []);
 
