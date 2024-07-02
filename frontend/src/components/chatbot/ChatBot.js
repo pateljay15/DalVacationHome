@@ -9,6 +9,22 @@ const ChatBot = () => {
     script.async = true;
     document.body.appendChild(script);
 
+    const userRole = localStorage.getItem("userRole") || "guest";
+
+    script.addEventListener("load", () => {
+      const dfMessenger = document.querySelector("df-messenger");
+      dfMessenger.addEventListener("df-messenger-loaded", function () {
+        const iframe = document.querySelector("df-messenger iframe");
+        iframe.contentWindow.postMessage(
+          {
+            event: "open",
+            data: { userRole: userRole },
+          },
+          "*"
+        );
+      });
+    });
+
     return () => {
       document.body.removeChild(script);
     };
