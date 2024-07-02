@@ -39,7 +39,7 @@ const ChatBot = () => {
   return (
     <df-messenger
       intent="vacbot_welcome"
-      chat-title="VacBot"
+      chat-title="DalVacationHome"
       agent-id="09dddef5-582f-4703-acd3-3f7ee1b45c11"
       language-code="en"
     ></df-messenger>
