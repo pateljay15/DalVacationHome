@@ -11,26 +11,34 @@ exports.handler = async (event) => {
         }
 
         const parameters = body.queryResult.parameters;
+        const intentName = body.queryResult.intent.displayName;
+
         console.log(`Event body received from bot: ${JSON.stringify(body)}`);
         console.log(`Parameters passed by bot: ${JSON.stringify(parameters)}`);
+        console.log(`Intent triggered: ${intentName}`);
 
-        const bookingId = parameters.BookingReferenceCode;
-        console.log(`1. Booking ID passed from user: ${bookingId}`);
+        let responseMessage;
+        
+        if (intentName === 'Booking Info Intent') {
+            const bookingId = parameters.BookingReferenceCode;
+            console.log(`1. Booking ID passed from user: ${bookingId}`);
 
-        const responseMessage = await invokeLambda('FetchBookingDetails', { bookingId });
+            responseMessage = await invokeLambda('FetchBookingDetails', { bookingId });
 
-        console.log(`2. Room number: ${responseMessage.roomNumber}`);
-        console.log(`3. Duration of stay: ${responseMessage.duration}`);
-        console.log(`4. Message to user: ${responseMessage.fulfillmentText}`);
+            console.log(`2. Room number: ${responseMessage.roomNumber}`);
+            console.log(`3. Duration of stay: ${responseMessage.duration}`);
+            console.log(`4. Message to user: ${responseMessage.fulfillmentText}`);
+        } else if (intentName === 'Customer Support Request Intent') {
+            const issue = parameters.Issue || '';
+            const bookingReferenceCode = parameters.BookingReferenceCode || '';
+            responseMessage = await invokeLambda('HandoffSupportRequest', { Issue: issue, BookingReferenceCode: bookingReferenceCode });
 
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                fulfillmentText: responseMessage.fulfillmentText
-            })
-        };
+            console.log(`Response from HandoffSupportRequest: ${responseMessage.fulfillmentText}`);
+        } else {
+            return createResponse('Sorry, I did not understand that request.');
+        }
 
-        return response;
+        return createResponse(responseMessage.fulfillmentText);
     } catch (error) {
         console.error('Error handling the event:', error);
 
@@ -60,4 +68,13 @@ async function invokeLambda(functionName, parameters) {
             fulfillmentText: 'There was an error processing your request. Please try again later.'
         };
     }
+}
+
+function createResponse(fulfillmentText) {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            fulfillmentText: fulfillmentText
+        })
+    };
 }
