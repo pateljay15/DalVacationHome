@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getAuthenticationToken, logout } from "../../services/AuthenticationServices/AuthenticationServices";
+import {
+  getAuthenticationToken,
+  logout,
+} from "../../services/AuthenticationServices/AuthenticationServices";
 
 function NavBar() {
   const [showSignupOptions, setShowSignupOptions] = useState(false);
-  const auth = getAuthenticationToken()
-  const role = auth?.auth?.payload["custom:role"]
+  const auth = getAuthenticationToken();
+  const role = auth?.auth?.payload["custom:role"];
   const navigate = useNavigate();
 
   const handleLogout = () => {
