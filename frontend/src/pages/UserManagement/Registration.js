@@ -29,6 +29,9 @@ const Registration = ({ type }) => {
     if (!/[A-Z]/.test(password)) {
       errors.capital = "Password must contain at least one capital letter.";
     }
+    if (!/[a-z]/.test(password)) {
+      errors.capital = "Password must contain at least one lowercase letter.";
+    }
     return errors;
   };
 
