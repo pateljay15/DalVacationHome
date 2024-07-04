@@ -1,39 +1,51 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./ChatBot.css";
 
 const ChatBot = () => {
-  useEffect(() => {
-    const userRole = localStorage.getItem("userRole") || "guest";
+  const [userRole, setUserRole] = useState(localStorage.getItem("userRole") || "guest");
 
-    const handleMessengerLoaded = () => {
+  useEffect(() => {
+    const updateUserRole = () => {
+      const role = localStorage.getItem("userRole") || "guest";
+      console.log("Retrieved userRole from localStorage:", role); // Log the retrieved userRole
+      setUserRole(role);
+
       const iframe = document.querySelector("df-messenger iframe");
       if (iframe && iframe.contentWindow) {
+        console.log("Posting message to iframe:", { event: "open", data: { userRole: role } }); // Log the message being posted to the iframe
         iframe.contentWindow.postMessage(
           {
             event: "open",
-            data: { userRole: userRole },
+            data: { userRole: role },
           },
           "*"
         );
+      } else {
+        console.log("Iframe or iframe.contentWindow is not available"); // Log if iframe is not available
       }
     };
 
-    const dfMessenger = document.querySelector("df-messenger");
-    if (dfMessenger) {
-      dfMessenger.addEventListener(
-        "df-messenger-loaded",
-        handleMessengerLoaded
-      );
-    }
+    window.addEventListener("storage", updateUserRole);
+
+    // Initial user role setup
+    updateUserRole();
 
     return () => {
-      if (dfMessenger) {
-        dfMessenger.removeEventListener(
-          "df-messenger-loaded",
-          handleMessengerLoaded
-        );
-      }
+      window.removeEventListener("storage", updateUserRole);
     };
+  }, []);
+
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"]')) {
+      const script = document.createElement("script");
+      script.src = "https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1";
+      script.async = true;
+      document.body.appendChild(script);
+
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
   }, []);
 
   return (

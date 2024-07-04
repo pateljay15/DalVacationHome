@@ -17,7 +17,7 @@ exports.handler = async (event) => {
         console.log(`Event body received from bot: ${JSON.stringify(body)}`);
         console.log(`Parameters passed by bot: ${JSON.stringify(parameters)}`);
         console.log(`Intent triggered: ${intentName}`);
-        console.log(`User role: ${userRole}`);
+        console.log(`User role: ${userRole}`); // Log the user role received
 
         let responseMessage;
         
@@ -40,6 +40,7 @@ exports.handler = async (event) => {
             // Handle navigation intent
             responseMessage = { fulfillmentText: 'Navigation handled' };
         } else {
+            console.log(`User does not have the necessary permissions for this request. User role: ${userRole}`);
             responseMessage = { fulfillmentText: 'Sorry, you do not have the necessary permissions for this request.' };
         }
 
