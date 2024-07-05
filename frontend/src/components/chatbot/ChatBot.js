@@ -3,23 +3,22 @@ import "./ChatBot.css";
 import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
 
 const ChatBot = () => {
-  const [userRole, setUserRole] = useState("");
+  // const [userRole, setUserRole] = useState("");
   const auth = getAuthenticationToken();
-  const role = auth?.auth?.payload["custom:role"] || "guest";
+  const token = auth?.auth?.jwtToken || null;
 
   useEffect(() => {
     const updateUserRole = () => {
-      // const role = localStorage.getItem("userRole") || "guest";
-      console.log("Retrieved userRole from localStorage:", role); // Log the retrieved userRole
-      setUserRole(role);
+      console.log("Retrieved userRole:", token); // Log the retrieved userRole
+      // setUserRole(token);
 
       const iframe = document.querySelector("df-messenger iframe");
       if (iframe && iframe.contentWindow) {
-        console.log("Posting message to iframe:", { event: "open", data: { userRole: role } }); // Log the message being posted to the iframe
+        console.log("Posting message to iframe:", { event: "open", data: { userRole: token } }); // Log the message being posted to the iframe
         iframe.contentWindow.postMessage(
           {
             event: "open",
-            data: { userRole: role },
+            data: { userRole: token },
           },
           "*"
         );
@@ -36,7 +35,7 @@ const ChatBot = () => {
     return () => {
       window.removeEventListener("storage", updateUserRole);
     };
-  }, []);
+  }, [auth]);
 
   useEffect(() => {
     if (!document.querySelector('script[src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"]')) {
