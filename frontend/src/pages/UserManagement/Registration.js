@@ -2,6 +2,7 @@ import { CognitoUserAttribute } from "amazon-cognito-identity-js";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userpool from "../../config/cognitoconfig/userpool";
+import { toast } from "react-toastify";
 
 const Registration = ({ type }) => {
   const [name, setName] = useState("");
@@ -80,9 +81,29 @@ const Registration = ({ type }) => {
     let username = email;
     userpool.signUp(username, password, attributeList, null, (err, data) => {
       if (err) {
+        toast.error("Registration Failed.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
         console.log(err);
         alert("Couldn't sign up");
       } else {
+        toast.success("Registration Successfull", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
         console.log(data);
         //navigate("/verifyemail", { state: { username: username } });
         storeUserDetailsInDynamoDB({

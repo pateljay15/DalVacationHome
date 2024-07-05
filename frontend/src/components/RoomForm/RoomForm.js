@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { postData } from '../../services/RoomManagementServices/RoomManagementServices';
 import { getAuthenticationToken } from '../../services/AuthenticationServices/AuthenticationServices';
+import { toast } from 'react-toastify';
 
 const RoomForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -43,6 +44,16 @@ const RoomForm = ({ onSubmit }) => {
     postData(formattedData)
     .then(res => {
       console.log(res)
+      toast.success("Room Created.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
       // if (res.statusCode == 200) {
         // console.log(res)
         setFormData({
@@ -57,7 +68,18 @@ const RoomForm = ({ onSubmit }) => {
         });
       // }
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      toast.error("Room Creation Failed", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    })
   };
 
   const handleFileChange = (event) => {

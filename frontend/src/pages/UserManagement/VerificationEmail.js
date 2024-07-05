@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import userpool from '../../config/cognitoconfig/userpool';
 import { CognitoUser} from "amazon-cognito-identity-js"
+import { toast } from 'react-toastify';
 
 const VerificationEmail = () => {
   const [code, setCode] = useState('');
@@ -24,11 +25,30 @@ const VerificationEmail = () => {
     var cognitoUser = new CognitoUser(userData);
     cognitoUser.confirmRegistration(code, true, function (err, result) {
         if (err) {
-            alert(err.message || JSON.stringify(err));
+          toast.error("Email Verifcation Failed. Plz check code", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
             return;
         }
 	    // Simulate a verification process
         console.log("Verification code submitted:", result);
+        toast.success("Email Verification Successfull", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
         navigate('/user/login'); // or any other route
     });
   };
