@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./ChatBot.css";
+import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
 
 const ChatBot = () => {
-  const [userRole, setUserRole] = useState(localStorage.getItem("userRole") || "guest");
+  const [userRole, setUserRole] = useState("");
+  const auth = getAuthenticationToken();
+  const role = auth?.auth?.payload["custom:role"] || "guest";
 
   useEffect(() => {
     const updateUserRole = () => {
-      const role = localStorage.getItem("userRole") || "guest";
+      // const role = localStorage.getItem("userRole") || "guest";
       console.log("Retrieved userRole from localStorage:", role); // Log the retrieved userRole
       setUserRole(role);
 
