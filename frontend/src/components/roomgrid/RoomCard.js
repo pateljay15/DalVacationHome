@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
+import { toast } from "react-toastify";
 
 const RoomCard = ({ room, onDelete, onEdit }) => {
   const navigate = useNavigate();
@@ -25,13 +26,30 @@ const RoomCard = ({ room, onDelete, onEdit }) => {
 
       if (response.ok) {
         onDelete(room.roomid);
-        alert("Room deleted successfully");
+        toast.success("Room deleted successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
       } else {
-        alert("Failed to delete room");
+        toast.error("Failed to delete room", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
       }
     } catch (error) {
       console.error("Error deleting room:", error);
-      alert("Failed to delete room");
     }
   };
 

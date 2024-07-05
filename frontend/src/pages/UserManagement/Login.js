@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate} from "react-router-dom"
 import { authenticate, logout } from "../../services/AuthenticationServices/AuthenticationServices"
+ import { ToastContainer, toast } from 'react-toastify';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -18,7 +19,18 @@ function Login() {
             // navigate('/home');
             navigate("/verifysecurityanswer", { state: { username: email, auth : data.idToken } });
           })
-          .catch(err=>console.log(err))
+          .catch(err=>{
+            toast.error(err, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                });
+          })
     };
 
     return (

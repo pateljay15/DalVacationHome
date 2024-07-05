@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./UpdateRoomForm.css";
+import { toast } from "react-toastify";
 
 const UpdateRoomForm = ({ room, onUpdate, onClose }) => {
   const [updatedRoom, setUpdatedRoom] = useState({
@@ -60,14 +61,31 @@ const UpdateRoomForm = ({ room, onUpdate, onClose }) => {
       if (response.ok) {
         const updatedRoomData = await response.json();
         onUpdate(updatedRoomData);
-        alert("Room updated successfully");
+        toast.success("Room updated", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
         onClose();
       } else {
-        alert("Failed to update room");
+        toast.error("Failed to update room", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
       }
     } catch (error) {
       console.error("Error updating room:", error);
-      alert("Failed to update room");
     }
   };
 

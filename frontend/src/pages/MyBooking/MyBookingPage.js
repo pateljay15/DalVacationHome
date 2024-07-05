@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import FeedbackModal from '../../components/MyBooking/FeedbackModal';  // Import the FeedbackModal component
 import { getAuthenticationToken } from '../../services/AuthenticationServices/AuthenticationServices';
 import { postFeedbackForRoom } from '../../services/BookingServices/BookingServices';
+import { toast } from 'react-toastify';
 
 
 function MyBookingPage() {
@@ -41,10 +42,31 @@ function MyBookingPage() {
 
     postFeedbackForRoom(feedbackData)
     .then(res => {
+      toast.success("Feedback Received", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
       console.log(res)
       setCurrentBooking(null)
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      toast.error("Feedback failed", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    })
     
   };
 

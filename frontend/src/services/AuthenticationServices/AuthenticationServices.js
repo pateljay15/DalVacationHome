@@ -1,4 +1,5 @@
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
+import { ToastContainer, toast } from 'react-toastify';
 import userpool from '../../config/cognitoconfig/userpool';
 export const authenticate=(Email,Password)=>{
     return new Promise((resolve,reject)=>{
@@ -19,6 +20,16 @@ export const authenticate=(Email,Password)=>{
             },
             onFailure:(err)=>{
                 console.log("login failed",err);
+                toast.error("Invalid Email or Password", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    });
                 reject(err);
             }
         });

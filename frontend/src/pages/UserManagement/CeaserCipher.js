@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { verifyCeaserCipher } from '../../services/AuthenticationServices/AuthenticationServices';
+import { ToastContainer, toast } from 'react-toastify';
 
 const CaesarCipher = () => {
   const navigate = useNavigate();
@@ -54,8 +55,18 @@ const CaesarCipher = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (userInput.toUpperCase() === originalText) {
-      alert('Correct! Well done.');
+      // alert('Correct! Well done.');
       localStorage.setItem("auth", JSON.stringify(location.state));
+      toast.success("Successfull Authentication", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
       navigate('/'); // or another appropriate route
     } else {
       setError('Incorrect. Please try again.');
