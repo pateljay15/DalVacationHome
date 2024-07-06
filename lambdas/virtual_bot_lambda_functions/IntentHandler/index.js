@@ -12,7 +12,9 @@ exports.handler = async (event) => {
 
     const parameters = body.queryResult.parameters;
     const intentName = body.queryResult.intent.displayName;
-    const token = body.originalDetectIntentRequest.payload.data.token // Access userRole correctly
+
+    // Access token safely using optional chaining
+    const token = body?.originalDetectIntentRequest?.payload?.data?.userRole; // Updated this line
 
     console.log(`Event body received from bot: ${JSON.stringify(body)}`);
     console.log(`Parameters passed by bot: ${JSON.stringify(parameters)}`);

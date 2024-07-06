@@ -3,28 +3,44 @@ import "./ChatBot.css";
 import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
 
 const ChatBot = () => {
-  // const [userRole, setUserRole] = useState("");
   const auth = getAuthenticationToken();
   const token = auth?.auth?.jwtToken || null;
 
   useEffect(() => {
     const updateUserRole = () => {
-      console.log("Retrieved userRole:", token); // Log the retrieved userRole
-      // setUserRole(token);
+      console.log("Retrieved userRole:", token);
+      
+      const postMessageToIframe = () => {
+        const iframe = document.querySelector("df-messenger iframe");
+        if (iframe && iframe.contentWindow) {
+          console.log("Posting message to iframe:", { event: "open", data: { userRole: token } });
+          iframe.contentWindow.postMessage(
+            {
+              event: "open",
+              data: { userRole: token },
+            },
+            "*"
+          );
+        } else {
+          console.log("Iframe or iframe.contentWindow is not available");
+        }
+      };
 
-      const iframe = document.querySelector("df-messenger iframe");
-      if (iframe && iframe.contentWindow) {
-        console.log("Posting message to iframe:", { event: "open", data: { userRole: token } }); // Log the message being posted to the iframe
-        iframe.contentWindow.postMessage(
-          {
-            event: "open",
-            data: { userRole: token },
-          },
-          "*"
-        );
-      } else {
-        console.log("Iframe or iframe.contentWindow is not available"); // Log if iframe is not available
-      }
+      // Retry logic
+      let retries = 5;
+      const interval = setInterval(() => {
+        const iframe = document.querySelector("df-messenger iframe");
+        if (iframe && iframe.contentWindow) {
+          postMessageToIframe();
+          clearInterval(interval);
+        } else if (retries <= 0) {
+          console.log("Iframe or iframe.contentWindow is still not available after retries");
+          clearInterval(interval);
+        } else {
+          retries--;
+          console.log(`Retrying to access iframe. Remaining retries: ${retries}`);
+        }
+      }, 1000);
     };
 
     window.addEventListener("storage", updateUserRole);
