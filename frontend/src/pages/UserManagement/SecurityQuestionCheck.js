@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { verifyCeaserCipher, verifySecurityQuestionCheck } from '../../services/AuthenticationServices/AuthenticationServices';
+import { toast } from 'react-toastify';
 
 const SecurityQuestionCheck = () => {
   const [answer, setAnswer] = useState('');
@@ -26,10 +27,41 @@ const SecurityQuestionCheck = () => {
         let body = JSON.parse(data.body)
         if (body.securityAnswer == answer) {
           console.log(data)
+          toast.success("Security QnA Passed", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
           navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
+        }else {
+          toast.error("Wrong Answer inputed for Question", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
         }
     })
     .catch(err => {
+      toast.error("Wrong Answer inputed for Question", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
         console.log(err)
     })
     // navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
