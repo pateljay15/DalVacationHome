@@ -1,13 +1,36 @@
 import React, { useState } from 'react';
+import { useNavigate} from "react-router-dom"
+import { authenticate, logout } from "../../services/AuthenticationServices/AuthenticationServices"
+ import { ToastContainer, toast } from 'react-toastify';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault();
         // Handle login logic here
         console.log('Login with:', email, password);
+        authenticate(email,password)
+          .then((data)=>{
+            console.log(data)
+            // localStorage.setItem("auth", JSON.stringify(data.idToken))
+            // navigate('/home');
+            navigate("/verifysecurityanswer", { state: { username: email, auth : data.idToken } });
+          })
+          .catch(err=>{
+            toast.error(err, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                });
+          })
     };
 
     return (

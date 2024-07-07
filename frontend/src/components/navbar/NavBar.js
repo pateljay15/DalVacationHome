@@ -1,14 +1,31 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import {
+  getAuthenticationToken,
+  logout,
+} from "../../services/AuthenticationServices/AuthenticationServices";
+import { toast } from "react-toastify";
 
 function NavBar() {
   const [showSignupOptions, setShowSignupOptions] = useState(false);
-  const auth = localStorage.getItem("authToken"); // Example of fetching an auth token
+  const auth = getAuthenticationToken();
+  const role = auth?.auth?.payload["custom:role"];
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Example of removing an auth token
-    navigate("/signup");
+    logout();
+    toast.success("Logout Successful", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+    localStorage.removeItem("auth"); // Ensure auth is cleared
+    navigate("/");
   };
 
   const handleSignup = () => {
@@ -20,25 +37,51 @@ function NavBar() {
     setShowSignupOptions(false);
   };
 
-  const handlePartnerRegistration = () => {
-    navigate("/partner/registration");
+  const handlePropertyAgentRegistration = () => {
+    navigate("/propertyagent/registration");
     setShowSignupOptions(false);
   };
 
   return (
-    <nav className="bg-gray-800 flex justify-between items-center p-5">
+    <nav className="bg-gray-900 flex justify-between items-center p-5 shadow-lg">
       <div className="navbar-brand">
-        <a href="/" className="text-white text-2xl font-bold no-underline">
-          bookRoom!
-        </a>
+        <NavLink
+          to="/"
+          className="text-white text-2xl font-bold no-underline hover:text-yellow-400"
+        >
+          DalVacationHome
+        </NavLink>
       </div>
-      <div className="flex-grow"></div>
-      <div className="navbar-links flex items-center">
+      <div className="flex-grow flex justify-center items-center space-x-6">
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "text-yellow-400 text-lg font-bold no-underline"
+              : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+          }
+          to="/"
+        >
+          Home
+        </NavLink>
+        {auth && role === "0" && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 text-lg font-bold no-underline"
+                : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+            }
+            to="/mybookings"
+          >
+            MyBookings
+          </NavLink>
+        )}
+      </div>
+      <div className="navbar-links flex items-center space-x-6">
         {auth == null ? (
           <>
             <div className="relative">
               <span
-                className="text-white text-lg font-bold no-underline mx-3 cursor-pointer"
+                className="text-white text-lg font-bold no-underline cursor-pointer hover:text-yellow-400"
                 onClick={handleSignup}
               >
                 Signup
@@ -53,9 +96,9 @@ function NavBar() {
                   </button>
                   <button
                     className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
-                    onClick={handlePartnerRegistration}
+                    onClick={handlePropertyAgentRegistration}
                   >
-                    Partner Signup
+                    Property Agent Signup
                   </button>
                 </div>
               )}
@@ -63,8 +106,8 @@ function NavBar() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? "text-white text-lg font-bold no-underline mx-3 border-b-2 border-yellow-400"
-                  : "text-white text-lg font-bold no-underline mx-3"
+                  ? "text-yellow-400 text-lg font-bold no-underline"
+                  : "text-white text-lg font-bold no-underline hover:text-yellow-400"
               }
               to="/user/login"
             >
@@ -73,7 +116,7 @@ function NavBar() {
           </>
         ) : (
           <span
-            className="text-white text-lg font-bold no-underline mx-3 hover:text-yellow-400 cursor-pointer"
+            className="text-white text-lg font-bold no-underline hover:text-yellow-400 cursor-pointer"
             onClick={handleLogout}
           >
             Logout
