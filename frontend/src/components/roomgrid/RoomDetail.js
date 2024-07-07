@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { roomsData } from './dummydata';
 import { postBookingData } from '../../services/BookingServices/BookingServices';
 import { getAuthenticationToken } from '../../services/AuthenticationServices/AuthenticationServices';
+import { toast } from 'react-toastify';
 
 const RoomDetail = () => {
   const { roomId } = useParams();
@@ -52,6 +53,12 @@ const RoomDetail = () => {
     });
   };
 
+  function generateRandomId() {
+    const prefix = "BH";
+    const randomDigits = Math.floor(100000 + Math.random() * 900000);
+    return prefix + randomDigits;
+  }
+  
   const handleBookingSubmit = (e) => {
     e.preventDefault();
     // Handle the booking form submission logic here
@@ -59,7 +66,7 @@ const RoomDetail = () => {
     // You can send bookingDetails to your backend API
     let bookingData = {
       ...bookingDetails,
-      bookingid: uuidv4(),
+      bookingid: generateRandomId(),
       roomid: room.roomid,
       propertyAgent: room.propertyAgent,
       customerName: auth?.auth.payload.name,
@@ -67,6 +74,16 @@ const RoomDetail = () => {
     }
     postBookingData(bookingData)
     .then(data => {
+      toast.success("Booking Successful", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
       console.log(data)
       setBookingDetails({
         roomNumber: '',
@@ -78,7 +95,18 @@ const RoomDetail = () => {
       });
       
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      toast.error("Booking failed", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    })
   };
 
   return (
