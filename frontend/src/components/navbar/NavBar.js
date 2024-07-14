@@ -12,8 +12,8 @@ function NavBar() {
   const role = auth?.auth?.payload["custom:role"];
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     toast.success("Logout Successful", {
       position: "top-right",
       autoClose: 5000,
@@ -23,7 +23,7 @@ function NavBar() {
       draggable: true,
       progress: undefined,
       theme: "dark",
-      });
+    });
     localStorage.removeItem("auth"); // Ensure auth is cleared
     navigate("/");
   };
