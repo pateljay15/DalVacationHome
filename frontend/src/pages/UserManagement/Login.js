@@ -5,7 +5,6 @@ import {
   logout,
 } from "../../services/AuthenticationServices/AuthenticationServices";
 import { ToastContainer, toast } from "react-toastify";
-import { logEvent } from "../../services/EventLoggingService/EventLoggingService";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -19,7 +18,6 @@ function Login() {
     authenticate(email, password)
       .then(async (data) => {
         console.log(data);
-        await logEvent(email, "login");
         // localStorage.setItem("auth", JSON.stringify(data.idToken))
         // navigate('/home');
         navigate("/verifysecurityanswer", {

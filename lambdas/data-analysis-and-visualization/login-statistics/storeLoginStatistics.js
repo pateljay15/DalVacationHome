@@ -21,7 +21,13 @@ export const handler = async (event) => {
     UpdateExpression:
       "SET loghistory = list_append(if_not_exists(loghistory, :emptyList), :logEntry)",
     ExpressionAttributeValues: {
-      ":logEntry": [{ date: date, time: time, action: action }],
+      ":logEntry": [
+        {
+          action: action,
+          date: date,
+          time: time,
+        },
+      ],
       ":emptyList": [],
     },
     ReturnValues: "UPDATED_NEW",
