@@ -41,7 +41,7 @@ const SecurityQuestionCheck = () => {
             progress: undefined,
             theme: "dark",
           });
-          await logEvent(state.username, "security_question_passed");
+          await logEvent(state.username, "security question passed");
           navigate("/verifyceasercipher", {
             state: { username: state.username, auth: state.auth },
           });
@@ -70,7 +70,7 @@ const SecurityQuestionCheck = () => {
           theme: "dark",
         });
         console.log(err);
-        await logEvent(state.username, "security_question_failed");
+        await logEvent(state.username, "security question failed");
       });
     // navigate("/verifyceasercipher", { state: { username: state.username, auth : state.auth } });
   };

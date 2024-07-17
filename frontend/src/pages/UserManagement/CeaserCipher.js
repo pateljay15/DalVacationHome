@@ -75,7 +75,7 @@ const CaesarCipher = () => {
         progress: undefined,
         theme: "dark",
       });
-      logEvent(location.state.username, "ceaser_cipher_passed");
+      logEvent(location.state.username, "ceaser cipher passed");
       navigate("/"); // or another appropriate route
     } else {
       toast.error("Ceaser Cipher multi-factor failed", {
@@ -89,7 +89,7 @@ const CaesarCipher = () => {
         theme: "dark",
       });
       setError("Incorrect. Please try again.");
-      logEvent(location.state.username, "ceaser_cipher_failed");
+      logEvent(location.state.username, "ceaser cipher failed");
     }
   };
 
