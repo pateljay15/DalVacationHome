@@ -23,7 +23,7 @@ exports.handler = async (event) => {
 
     let responseMessage;
 
-    if (intentName === 'Booking Info Intent' && (token != null)) { // Compare with strings
+    if (intentName === 'Booking Info Intent' /* && (token != null) */) { // Compare with strings
       const bookingId = parameters.BookingReferenceCode;
       console.log(`1. Booking ID passed from user: ${bookingId}`);
 
@@ -32,7 +32,7 @@ exports.handler = async (event) => {
       console.log(`2. Room number: ${responseMessage.roomNumber}`);
       console.log(`3. Duration of stay: ${responseMessage.duration}`);
       console.log(`4. Message to user: ${responseMessage.fulfillmentText}`);
-    } else if (intentName === 'Customer Support Request Intent' && (token != null)) { // Compare with strings
+    } else if (intentName === 'Customer Support Request Intent' /* && (token != null) */) { // Compare with strings
       const issue = parameters.Issue || '';
       const bookingReferenceCode = parameters.BookingReferenceCode || '';
       responseMessage = await invokeLambda('HandoffSupportRequest', { Issue: issue, BookingReferenceCode: bookingReferenceCode });
