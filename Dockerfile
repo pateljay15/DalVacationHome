@@ -52,4 +52,5 @@ RUN yarn build
 
 FROM nginx:1.21-alpine
 COPY --from=build /app/build /opt/site
-COPY frontend/nginx.conf /etc/nginx/nginx.conf
+COPY frontend/nginx.conf.template /etc/nginx/nginx.conf.template
+CMD ["sh", "-c", "envsubst '$PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]
