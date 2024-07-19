@@ -2,7 +2,7 @@ FROM node:alpine as build-stage
 
 WORKDIR /app
 COPY . .
-RUN cd frontend && npm install && npm run build
+RUN cd frontend && yarn install && yarn build
 
 FROM nginx
 
