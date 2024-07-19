@@ -1,5 +1,5 @@
 # Use a specific version of node:alpine for better reproducibility
-FROM node:14 as build-stage
+FROM node:20 as build-stage
 
 # Update npm to the latest version and install yarn
 # Clear any existing npm cache
