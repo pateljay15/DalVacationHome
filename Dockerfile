@@ -10,6 +10,7 @@ COPY frontend/ /app/
 # Install dependencies with yarn, and build the project
 # No need to navigate since WORKDIR is already set
 RUN npm install
+RUN ls -al /app/node_modules/react-scripts
 RUN npm run build
 
 # Use a specific version of nginx:alpine for better reproducibility
