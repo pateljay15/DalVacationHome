@@ -87,6 +87,30 @@ function NavBar() {
             User Analytics
           </NavLink>
         )}
+        {auth && role === "0" && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 text-lg font-bold no-underline"
+                : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+            }
+            to="/customerconcerns"
+          >
+            My Concerns
+          </NavLink>
+        )}
+        {auth && role === "1" && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 text-lg font-bold no-underline"
+                : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+            }
+            to="/agent/concerns"
+          >
+            Customer Concerns
+          </NavLink>
+        )}
       </div>
       <div className="navbar-links flex items-center space-x-6">
         {auth == null ? (
