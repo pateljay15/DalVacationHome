@@ -9,8 +9,8 @@ COPY frontend/ /app/
 
 # Install dependencies with yarn, and build the project
 # No need to navigate since WORKDIR is already set
-RUN yarn install
-RUN yarn build
+RUN npm install
+RUN npm run build
 
 # Use a specific version of nginx:alpine for better reproducibility
 FROM nginx:alpine
