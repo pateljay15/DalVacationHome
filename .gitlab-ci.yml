@@ -8,7 +8,7 @@ cloud_run_deploy:
   services:
     - docker:dind
   only:
-    - "gitlab_cicd_gcp"
+    - "gitlab_cICD_GCP"
   script:
     - echo $GCP_SERVICE_KEY > gcloud-service-key.json # Google Cloud service accounts
     - gcloud auth activate-service-account --key-file=gcloud-service-key.json
