@@ -9,7 +9,9 @@ COPY . .
 
 # Navigate to the frontend directory, install dependencies with yarn, and build the project
 # Switched to yarn for both install and build since you initially used yarn for install
-RUN cd /app/frontend && yarn install && yarn build
+RUN cd /app/frontend
+RUN yarn install
+RUN yarn build
 
 # Use a specific version of nginx for better reproducibility
 FROM nginx:alpine
