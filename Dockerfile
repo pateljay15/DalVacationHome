@@ -4,14 +4,17 @@ FROM node:alpine as build-stage
 # Set the working directory for the build stage
 WORKDIR /app
 
+# Ensure the PATH includes the node_modules/.bin directory
+ENV PATH /app/node_modules/.bin:$PATH
+
 # Copy all files from the project's frontend directory to the Docker image
 COPY frontend/ /app/
 
-# Install dependencies with yarn, and build the project
-# No need to navigate since WORKDIR is already set
-RUN npm install
-RUN ls -al /app/node_modules/react-scripts
-RUN npm run build
+# Install dependencies with yarn, with verbose logging to troubleshoot potential issues
+RUN yarn install --verbose
+
+# Use npx to explicitly call react-scripts
+RUN npx react-scripts build
 
 # Use a specific version of nginx:alpine for better reproducibility
 FROM nginx:alpine
