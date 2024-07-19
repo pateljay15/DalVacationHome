@@ -4,20 +4,19 @@ FROM node:alpine as build-stage
 # Set the working directory for the build stage
 WORKDIR /app
 
-# Copy all files from the project directory to the Docker image
-COPY . .
+# Copy all files from the project's frontend directory to the Docker image
+COPY frontend/ /app/
 
-# Navigate to the frontend directory, install dependencies with yarn, and build the project
-# Switched to yarn for both install and build since you initially used yarn for install
-RUN cd /app/frontend
+# Install dependencies with yarn, and build the project
+# No need to navigate since WORKDIR is already set
 RUN yarn install
 RUN yarn build
 
-# Use a specific version of nginx for better reproducibility
+# Use a specific version of nginx:alpine for better reproducibility
 FROM nginx:alpine
 
 # Copy the built static files from the build stage to the nginx serving directory
-COPY --from=build-stage /app/frontend/build/ /usr/share/nginx/html
+COPY --from=build-stage /app/build/ /usr/share/nginx/html
 
 # Copy the Nginx configuration file into the image
 COPY --from=build-stage /app/nginx.conf /etc/nginx/conf.d/default.conf
