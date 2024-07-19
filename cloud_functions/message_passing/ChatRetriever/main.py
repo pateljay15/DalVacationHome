@@ -1,5 +1,6 @@
 import functions_framework
 from google.cloud import firestore
+from flask import jsonify
 
 db = firestore.Client()
 
@@ -8,28 +9,28 @@ def ChatRetriever(request):
     request_json = request.get_json(silent=True)
     request_args = request.args
 
-    email_id = None
+    customer_email = None
 
-    if request_json and 'emailId' in request_json:
-        email_id = request_json['emailId']
-    elif request_args and 'emailId' in request_args:
-        email_id = request_args['emailId']
+    if request_json and 'customerEmail' in request_json:
+        customer_email = request_json['customerEmail']
+    elif request_args and 'customerEmail' in request_args:
+        customer_email = request_args['customerEmail']
 
-    if not email_id:
-        return 'EmailId is required!', 400
+    if not customer_email:
+        return jsonify({'error': 'customerEmail is required!'}), 400
 
     try:
-        chats_ref = db.collection('Chats')
-        query = chats_ref.where('emailId', '==', email_id)
+        issues_ref = db.collection('Issues')
+        query = issues_ref.where('customerEmail', '==', customer_email)
         docs = query.stream()
 
-        chats = []
+        issues = []
         for doc in docs:
-            chat_data = doc.to_dict()
-            chats.append(chat_data)
+            issue_data = doc.to_dict()
+            issue_data['concernId'] = doc.id
+            issues.append(issue_data)
 
-        return {'chats': chats}, 200
+        return jsonify({'issues': issues}), 200
 
     except Exception as e:
-        return {'error': str(e)}, 500
-
+        return jsonify({'error': str(e)}), 500
