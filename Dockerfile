@@ -1,6 +1,12 @@
 # Use a specific version of node:alpine for better reproducibility
 FROM node:alpine as build-stage
 
+# Update npm to the latest version and install yarn
+RUN npm install -g npm@latest yarn
+
+# Set environment options to manage memory use better
+ENV NODE_OPTIONS="--max_old_space_size=4096"
+
 # Set the working directory for the build stage
 WORKDIR /app
 
