@@ -5,9 +5,9 @@ Resources:
     Properties:
       FunctionName: GetBookingsByUserFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: get-bookings-by-user.zip
       Runtime: nodejs20.x 
       MemorySize: 128
@@ -18,9 +18,9 @@ Resources:
     Properties:
       FunctionName: HandoffSupportRequestFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: HandoffSupportRequest.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -31,9 +31,9 @@ Resources:
     Properties:
       FunctionName: AdminsFetcherFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: AdminsFetcher.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -44,9 +44,9 @@ Resources:
     Properties:
       FunctionName: StoreUserDetailsFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: StoreUserDetails.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -57,9 +57,9 @@ Resources:
     Properties:
       FunctionName: GetRoomsFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: get-rooms.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -70,9 +70,9 @@ Resources:
     Properties:
       FunctionName: FetchBookingDetailsFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: FetchBookingDetails.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -83,11 +83,24 @@ Resources:
     Properties:
       FunctionName: UpdateRoomFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: updateRoom.zip
       Runtime: nodejs20.x
+      MemorySize: 128
+      Timeout: 30
+
+  DeleteRoomFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: DeleteRoomFunction
+      Handler: index.handler
+      Role: arn:aws:iam::843898296640:role/LabRole
+      Code:
+        S3Bucket: dalvacationhome-lambdas
+        S3Key: DeleteRoom.zip
+      Runtime: nodejs20.x 
       MemorySize: 128
       Timeout: 30
 
@@ -96,9 +109,9 @@ Resources:
     Properties:
       FunctionName: RetrieveSecurityAnswerFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: RetrieveSecurityAnswer.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -109,9 +122,9 @@ Resources:
     Properties:
       FunctionName: FetchUserDataFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: fetchUserData.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -122,9 +135,9 @@ Resources:
     Properties:
       FunctionName: PostFeedbackFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: post-feedback.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -135,9 +148,9 @@ Resources:
     Properties:
       FunctionName: StoreLoginStatisticsFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: storeLoginStatistics.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -148,9 +161,9 @@ Resources:
     Properties:
       FunctionName: FreeRoomPeriodicallyFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: free-room-periodically.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -161,9 +174,9 @@ Resources:
     Properties:
       FunctionName: PostRoomDataFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: post-room-data.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -174,9 +187,9 @@ Resources:
     Properties:
       FunctionName: GetRoomFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: get-room.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -187,9 +200,9 @@ Resources:
     Properties:
       FunctionName: IntentHandlerFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: IntentHandler.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -200,9 +213,9 @@ Resources:
     Properties:
       FunctionName: RetrieveShiftKeyFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: RetrieveShiftKey.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -213,9 +226,9 @@ Resources:
     Properties:
       FunctionName: PostAuthenticationLoggingFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: post-authentication-logging.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -226,9 +239,9 @@ Resources:
     Properties:
       FunctionName: GetBookingByBookingIDFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: get-booking-by-bookingid.zip
       Runtime: nodejs20.x
       MemorySize: 128
@@ -239,9 +252,9 @@ Resources:
     Properties:
       FunctionName: PostRoomImageFunction
       Handler: index.handler
-      Role: arn:aws:iam::412177182595:role/LabRole
+      Role: arn:aws:iam::843898296640:role/LabRole
       Code:
-        S3Bucket: test-lambda-function-creation
+        S3Bucket: dalvacationhome-lambdas
         S3Key: post-room-image.zip
       Runtime: nodejs20.x
       MemorySize: 128
