@@ -12,6 +12,10 @@ import { roomsData } from "../components/roomgrid/dummydata";
 import MyBookingPage from "../pages/MyBooking/MyBookingPage";
 import BookingDetailPage from "../pages/MyBooking/BookingDetailPage";
 import UserAnalytics from "../pages/User Analytics/UserAnalytics";
+import CustomerConcerns from "../pages/CustomerConcerns/CustomerConcerns";
+import ConcernChat from "../pages/CustomerConcerns/ConcernChat";
+import AgentConcerns from "../pages/PropertyAgentConcerns/AgentConcerns";
+import AgentConcernChat from "../pages/PropertyAgentConcerns/AgentConcernChat";
 
 // const roomsData = [
 //   { id: 1, roomNumber: "101", price: "$50", imageUrl: "https://en.idei.club/uploads/posts/2023-08/thumbs/1691227156_en-idei-club-p-simple-hotel-room-images-dizain-vkontakte-32.jpg", features: ["Free Wi-Fi", "Air Conditioning", "Breakfast Included"] },
@@ -37,6 +41,10 @@ export const Router = () => {
       <Route path="/mybookings" element={<MyBookingPage />} />
       <Route path="/booking/:bookingId" element={<BookingDetailPage />} />
       <Route path="/useranalytics" element={<UserAnalytics />} />
+      <Route path="/customerconcerns" element={<CustomerConcerns />} />
+      <Route path="/concern/:concernId" element={<ConcernChat />} />
+      <Route path="/agent/concerns" element={<AgentConcerns />} />
+      <Route path="/agent/concern/:concernId" element={<AgentConcernChat />} />
     </Routes>
   );
 };
