@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import RoomForm from '../../components/RoomForm/RoomForm';
-import RoomGrid from '../../components/roomgrid/RoomGrid';
-import { getAuthenticationToken } from '../../services/AuthenticationServices/AuthenticationServices';
+import React, { useState } from "react";
+import RoomForm from "../../components/RoomForm/RoomForm";
+import RoomGrid from "../../components/roomgrid/RoomGrid";
+import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
 
 function Home() {
   const [showForm, setShowForm] = useState(false);
-  const auth = getAuthenticationToken()
+  const auth = getAuthenticationToken();
   // console.log(auth)
-  const role = auth?.auth?.payload["custom:role"]
+  const role = auth?.auth?.payload["custom:role"];
 
   return (
     <div className="bg-gray-100">
@@ -28,20 +28,21 @@ function Home() {
       )}
 
       {/* Button fixed at the bottom right of the screen */}
-      {role === "1" && (<button
-        className="fixed bottom-5 right-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-20"
-        onClick={() => setShowForm(!showForm)}
-      >
-        {showForm ? "Hide Form" : "Create Room"}
-      </button>)}
-      
+      {role === "1" && (
+        <button
+          className="fixed bottom-5 left-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-20"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "Hide Form" : "Create Room"}
+        </button>
+      )}
 
       {/* Main content area where RoomGrid is displayed */}
       <div className="min-h-screen p-5">
         <RoomGrid />
       </div>
     </div>
-  )
+  );
 }
 
 export default Home;

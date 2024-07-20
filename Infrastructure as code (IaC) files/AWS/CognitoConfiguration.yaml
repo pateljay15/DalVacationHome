@@ -1,0 +1,41 @@
+Resources:
+  DalvacationHomeUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: dalvacationhome
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: true
+        - Name: role
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+      EmailVerificationSubject: "Verify your email for DalvacationHome"
+      EmailVerificationMessage: "Please click the link below to verify your email address. {####}"
+      MfaConfiguration: "OFF"
+      EmailConfiguration:
+        EmailSendingAccount: "COGNITO_DEFAULT"
+      VerificationMessageTemplate:
+        EmailMessage: "Please click the link below to verify your email address. {####}"
+        EmailSubject: "Verify your email for DalvacationHome"
+      LambdaConfig:
+        PostAuthentication: "arn:aws:lambda:us-east-1:843898296640:function:post-authentication-logging"
+
+  DalvacationHomeUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref DalvacationHomeUserPool
+      ClientName: dalvacationhome
+      GenerateSecret: false  # Set to false for public clients
