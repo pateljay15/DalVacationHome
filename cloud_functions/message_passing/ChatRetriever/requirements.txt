@@ -1,0 +1,5 @@
+google-cloud-firestore==2.9.0
+Flask==2.2.5
+functions-framework==3.0.0
+flask-cors
+requests

@@ -12,8 +12,8 @@ function NavBar() {
   const role = auth?.auth?.payload["custom:role"];
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     toast.success("Logout Successful", {
       position: "top-right",
       autoClose: 5000,
@@ -23,7 +23,7 @@ function NavBar() {
       draggable: true,
       progress: undefined,
       theme: "dark",
-      });
+    });
     localStorage.removeItem("auth"); // Ensure auth is cleared
     navigate("/");
   };
@@ -73,6 +73,42 @@ function NavBar() {
             to="/mybookings"
           >
             MyBookings
+          </NavLink>
+        )}
+        {auth && role === "1" && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 text-lg font-bold no-underline"
+                : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+            }
+            to="/useranalytics"
+          >
+            User Analytics
+          </NavLink>
+        )}
+        {auth && role === "0" && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 text-lg font-bold no-underline"
+                : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+            }
+            to="/customerconcerns"
+          >
+            My Concerns
+          </NavLink>
+        )}
+        {auth && role === "1" && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-yellow-400 text-lg font-bold no-underline"
+                : "text-white text-lg font-bold no-underline hover:text-yellow-400"
+            }
+            to="/agent/concerns"
+          >
+            Customer Concerns
           </NavLink>
         )}
       </div>

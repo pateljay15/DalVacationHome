@@ -9,8 +9,8 @@ import { toast } from 'react-toastify';
 const RoomDetail = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const auth = getAuthenticationToken()
-  const role = auth?.auth?.payload["custom:role"]
+  const auth = getAuthenticationToken();
+  const role = auth?.auth?.payload["custom:role"];
   const [room, setRoom] = useState({});
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [bookingDetails, setBookingDetails] = useState({
@@ -23,11 +23,9 @@ const RoomDetail = () => {
   });
 
   useEffect(() => {
-    console.log(roomId);
     fetch("https://fa7721ywbk.execute-api.us-east-1.amazonaws.com/room/" + roomId)
       .then(data => data.json())
       .then(roomdata => {
-        console.log(roomdata);
         setRoom(roomdata);
         setBookingDetails({
           ...bookingDetails,
@@ -58,12 +56,9 @@ const RoomDetail = () => {
     const randomDigits = Math.floor(100000 + Math.random() * 900000);
     return prefix + randomDigits;
   }
-  
+
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-    // Handle the booking form submission logic here
-    console.log('Booking Details:', bookingDetails);
-    // You can send bookingDetails to your backend API
     let bookingData = {
       ...bookingDetails,
       bookingid: generateRandomId(),
@@ -71,47 +66,54 @@ const RoomDetail = () => {
       propertyAgent: room.propertyAgent,
       customerName: auth?.auth.payload.name,
       customerEmail: auth?.auth.payload.email
-    }
+    };
     postBookingData(bookingData)
-    .then(data => {
-      toast.success("Booking Successful", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
+      .then(data => {
+        toast.success("Booking Successful", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
         });
-      console.log(data)
-      setBookingDetails({
-        roomNumber: '',
-        roomType: '',
-        roomPrice: '',
-        startDate: '',
-        endDate: '',
-        message: ''
+        setBookingDetails({
+          roomNumber: '',
+          roomType: '',
+          roomPrice: '',
+          startDate: '',
+          endDate: '',
+          message: ''
+        });
+      })
+      .catch(err => {
+        toast.error("Booking failed", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       });
-      
-    })
-    .catch(err => {
-      toast.error("Booking failed", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        });
-    })
+  };
+
+  const getPolarity = (score) => {
+    if (score > 0.6) return { text: "Clearly Positive", color: "bg-green-700 text-white" };
+    if (score > 0.2 && score <= 0.6) return { text: "Slightly Positive", color: "bg-green-300 text-black" };
+    if (score > 0.1 && score <= 0.2) return { text: "Neutral", color: "bg-yellow-200 text-black" };
+    if (score === 0.0) return { text: "Mixed", color: "bg-gray-300 text-black" };
+    if (score >= -0.6 && score < 0.0) return { text: "Slightly Negative", color: "bg-red-300 text-black" };
+    return { text: "Clearly Negative", color: "bg-red-700 text-white" };
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-5">
-      <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-5">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-10">
         <h2 className="text-2xl font-bold mb-5">Room {room?.roomNumber}</h2>
         <img src={room?.imageUrl} alt={`Room ${room?.roomNumber}`} className="mb-4 w-full" />
         <p className="text-gray-700 mb-4">Room Type: {room?.roomType}</p>
@@ -130,16 +132,40 @@ const RoomDetail = () => {
           ))}
         </ul>
         <h3 className="text-xl font-bold mb-3">Feedbacks</h3>
-        <div className="bg-gray-200 p-3 rounded-lg mb-4">
-          {room?.feedbacks?.length > 0 ? (
-            room?.feedbacks.map((comment, index) => (
-              <p key={index} className="text-gray-700 mb-2">
-                <span className="font-bold">{comment?.customerName}:</span> {comment?.feedbackText} {comment?.date}
-              </p>
-            ))
-          ) : (
-            <p>No Feedbacks yet.</p>
-          )}
+        <div className="overflow-x-auto">
+          <table className="w-full mb-4 table-auto">
+            <thead>
+              <tr>
+                <th className="border px-4 py-2">Customer</th>
+                <th className="border px-4 py-2">Feedback</th>
+                <th className="border px-4 py-2">Date</th>
+                <th className="border px-4 py-2">Score</th>
+                <th className="border px-4 py-2">Magnitude</th>
+                <th className="border px-4 py-2">Polarity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {room?.feedbacks?.length > 0 ? (
+                room?.feedbacks.map((comment, index) => {
+                  const polarity = getPolarity(comment?.sentimentScore);
+                  return (
+                    <tr key={index} className={`${polarity.color}`}>
+                      <td className="border px-4 py-2">{comment?.customerName}</td>
+                      <td className="border px-4 py-2">{comment?.feedbackText}</td>
+                      <td className="border px-4 py-2">{comment?.date}</td>
+                      <td className="border px-4 py-2">{comment?.sentimentScore.toFixed(2)}</td>
+                      <td className="border px-4 py-2">{comment?.sentimentMagnitude.toFixed(2)}</td>
+                      <td className="border px-4 py-2">{polarity.text}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan="6" className="border px-4 py-2 text-center">No Feedbacks yet.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
         <div className="flex justify-between">
           <button
@@ -148,15 +174,14 @@ const RoomDetail = () => {
           >
             Back
           </button>
-          {room.availability == true && role == "0" && (
-              <button
+          {room.availability && role == "0" && (
+            <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
               onClick={() => setShowBookingForm(true)}
-              >
+            >
               Book Room
-              </button>
-          ) }
-          
+            </button>
+          )}
         </div>
       </div>
 
