@@ -51,7 +51,7 @@ const ChatBot = () => {
     return () => {
       window.removeEventListener("storage", updateUserRole);
     };
-  }, [token]);
+  }, [auth]);
 
   useEffect(() => {
     if (!document.querySelector('script[src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"]')) {
@@ -67,21 +67,12 @@ const ChatBot = () => {
   }, []);
 
   return (
-    token ? (
-      <df-messenger
-        intent="vacbot_welcome"
-        chat-title="DalVacationHome"
-        agent-id="09dddef5-582f-4703-acd3-3f7ee1b45c11"
-        language-code="en"
-      ></df-messenger>
-    ) : (
-      <df-messenger
-        intent="vacbot_welcome"
-        chat-title="DalVacationHome"
-        agent-id="8bba284c-1d7f-49fa-badd-2b4efa370253"
-        language-code="en"
-      ></df-messenger>
-    )
+    <df-messenger
+      intent="vacbot_welcome"
+      chat-title="DalVacationHome"
+      agent-id="09dddef5-582f-4703-acd3-3f7ee1b45c11"
+      language-code="en"
+    ></df-messenger>
   );
 };
 

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userpool from "../../config/cognitoconfig/userpool";
 import { toast } from "react-toastify";
-import { logEvent } from "../../services/EventLoggingService/EventLoggingService";
 
 const Registration = ({ type }) => {
   const [name, setName] = useState("");
@@ -91,7 +90,7 @@ const Registration = ({ type }) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
-        });
+          });
         console.log(err);
         alert("Couldn't sign up");
       } else {
@@ -104,9 +103,8 @@ const Registration = ({ type }) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
-        });
+          });
         console.log(data);
-        logEvent(email, "registration");
         //navigate("/verifyemail", { state: { username: username } });
         storeUserDetailsInDynamoDB({
           email,

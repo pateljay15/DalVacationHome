@@ -57,18 +57,15 @@ exports.handler = async (event) => {
 
     const issue = body.Issue;
     const bookingReferenceCode = body.BookingReferenceCode;
-    const email = body.Email; // Retrieve email from the event body
 
-    console.log(`Triggered by IntentHandler`);
+    console.log(`triggered by IntentHandler`);
     console.log(`Issue received: ${issue}`);
     console.log(`Booking Reference Code received: ${bookingReferenceCode}`);
-    console.log(`Email received: ${email}`); // Log the received email
 
     const topicName = 'projects/thematic-answer-427612-g9/topics/ManageCustomerSupportRequest';
     const data = JSON.stringify({
         issue: issue,
-        bookingReferenceCode: bookingReferenceCode,
-        email: email // Include email in the data to be published
+        bookingReferenceCode: bookingReferenceCode
     });
 
     try {
