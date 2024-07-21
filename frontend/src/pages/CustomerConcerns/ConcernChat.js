@@ -1,68 +1,73 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-
-const dummyData = [
-  {
-    concernId: "1",
-    concernText: "Leaky faucet in the kitchen",
-    customerName: "Alice",
-    customerEmail: "alice@example.com",
-    agentName: "John Doe",
-    agentEmail: "john.doe@example.com",
-    dateRaised: "2023-07-16",
-    isActive: true,
-    chats: [
-      {
-        from: "agent",
-        message: "We will fix the leaky faucet tomorrow.",
-        timestamp: "2023-07-16T10:00:00Z"
-      },
-      {
-        from: "customer",
-        message: "Thank you!",
-        timestamp: "2023-07-16T10:05:00Z"
-      }
-    ]
-  },
-  {
-    concernId: "2",
-    concernText: "Broken window in the living room",
-    customerName: "Alice",
-    customerEmail: "alice@example.com",
-    agentName: "Jane Smith",
-    agentEmail: "jane.smith@example.com",
-    dateRaised: "2023-07-15",
-    isActive: false,
-    chats: [
-      {
-        from: "agent",
-        message: "The window repair is scheduled for next Monday.",
-        timestamp: "2023-07-15T09:00:00Z"
-      },
-      {
-        from: "customer",
-        message: "Got it. Thanks!",
-        timestamp: "2023-07-15T09:05:00Z"
-      }
-    ]
-  }
-];
+import React, { useEffect, useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 
 const ConcernChat = () => {
   const { concernId } = useParams();
-  const concernData = dummyData.find(item => item.concernId === concernId);
+  const location = useLocation();
+  const [concernData, setConcernData] = useState(null);
+  const [newMessage, setNewMessage] = useState('');
 
-  const [newMessage, setNewMessage] = React.useState('');
+  useEffect(() => {
+    const fetchConcernData = async () => {
+      try {
+        const response = await fetch('https://us-central1-thematic-answer-427612-g9.cloudfunctions.net/ChatRetriever', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ customerEmail: location.state.concern.customerEmail }),
+        });
+        const data = await response.json();
+        const foundConcern = data.issues.find(issue => issue.concernId === concernId);
+        setConcernData(foundConcern);
+      } catch (error) {
+        console.error('Error fetching concern data:', error);
+      }
+    };
 
-  const handleSendMessage = () => {
+    fetchConcernData();
+  }, [concernId, location.state.concern.customerEmail]);
+
+  const handleSendMessage = async () => {
     if (newMessage.trim()) {
-      console.log(`New message sent: ${newMessage}`);
-      setNewMessage('');
+      const newChat = {
+        from: 'customer',
+        message: newMessage,
+        timestamp: new Date().toISOString(),
+      };
+
+      const requestBody = {
+        concernId: concernId,
+        chats: [newChat],
+      };
+
+      try {
+        const response = await fetch('https://us-central1-thematic-answer-427612-g9.cloudfunctions.net/ChatLogger', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (response.ok) {
+          // Update the chat history in the local state
+          setConcernData(prevData => ({
+            ...prevData,
+            chats: [...prevData.chats, newChat],
+          }));
+          setNewMessage('');
+        } else {
+          console.error('Failed to log chat:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error logging chat:', error);
+      }
     }
   };
 
   if (!concernData) {
-    return <div>Concern not found</div>;
+    return <div>Loading...</div>;
   }
 
   return (
