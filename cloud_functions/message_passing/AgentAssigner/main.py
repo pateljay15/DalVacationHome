@@ -4,18 +4,18 @@ import random
 import requests
 import functions_framework
 from google.cloud import firestore
+from datetime import datetime
 
 db = firestore.Client()
 
-# Function to fetch admin names from the API endpoint
-def fetch_admin_names():
+# Function to fetch admin names and emails from the API endpoint
+def fetch_admins():
     url = "https://bnnk8ocuma.execute-api.us-east-1.amazonaws.com/v1/fetchAdmins"
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for HTTP errors
         admins = response.json()
-        admin_names = [admin['name'] for admin in admins]
-        return admin_names
+        return admins
     except requests.RequestException as e:
         print(f"Error fetching admins: {e}")
         return []
@@ -31,34 +31,47 @@ def hello_pubsub(cloud_event):
         
         # Extract bookingReferenceCode, issue, and email from message_data
         booking_reference_code = message_data.get("bookingReferenceCode", "")
-        issue = message_data.get("issue", "")
-        email = message_data.get("email", "")  # Extract email
+        concern_text = message_data.get("issue", "")  # Renamed to concern_text
+        customer_email = message_data.get("email", "")  # Extract email as customer_email
 
         # Print or log the extracted values
         print(f"Booking Reference Code: {booking_reference_code}")
-        print(f"Issue: {issue}")
-        print(f"Email: {email}")  # Log the email
+        print(f"Concern Text: {concern_text}")
+        print(f"Customer Email: {customer_email}")  # Log the email
 
-        # Fetch and log the admin names
-        admin_names = fetch_admin_names()
-        print(f"Fetched Admin Names: {admin_names}")
-
-        if admin_names:
-            # Pick a random admin
-            assigned_admin = random.choice(admin_names)
-            print(f"Assigned Admin: {assigned_admin}")
+        # Fetch and log the admin details
+        admins = fetch_admins()
+        if admins:
+            assigned_admin = random.choice(admins)
+            assigned_admin_name = assigned_admin['name']
+            assigned_admin_email = assigned_admin['email']
+            print(f"Assigned Admin: {assigned_admin_name}, Email: {assigned_admin_email}")
         else:
-            assigned_admin = "No Admin Available"
-            print(assigned_admin)
+            assigned_admin_name = "No Admin Available"
+            assigned_admin_email = "No Admin Available"
+            print("No Admin Available")
 
-        # Store the issue with the assigned agent name and email
+        # Initialize an empty array for chats
+        chats = []
+
+        # Dynamically generate dateRaised as the current date
+        date_raised = datetime.utcnow().isoformat()
+
+        # By default, keep isActive true
+        is_active = True
+
+        # Store the issue with the assigned agent name and email, and other details
         doc_ref = db.collection('Issues').add({
             'bookingReferenceCode': booking_reference_code,
-            'issue': issue,
-            'assignedAgentName': assigned_admin,
-            'email': email  # Add the email field
+            'concernText': concern_text,
+            'customerEmail': customer_email,
+            'agentName': assigned_admin_name,
+            'agentEmail': assigned_admin_email,
+            'dateRaised': date_raised,
+            'isActive': is_active,
+            'chats': chats
         })
-        document_id = doc_ref.id
+        document_id = doc_ref[1].id
         print(f"Data written to Firestore successfully. Document ID: {document_id}")
         
     except json.JSONDecodeError as e:
