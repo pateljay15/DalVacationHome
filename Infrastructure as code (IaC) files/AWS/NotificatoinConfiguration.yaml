@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Configuration for Notification Services including SNS, SQS, and Lambda Functions
+
+Resources:
+  NotificationTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: userNotifcation
+
+  NotificationQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: notificationQueue
+
+  SnsSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      Endpoint: !GetAtt NotificationQueue.Arn
+      Protocol: sqs
+      TopicArn: !Ref NotificationTopic
+      RawMessageDelivery: true
+
+  UserNotificationLogicLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: userNotificationLogic
+      Handler: index.handler
+      Role: arn:aws:iam::843898296640:role/LabRole
+      Code:
+        S3Bucket: dalvacationhome-lambdas
+        S3Key: notifications.zip
+      Runtime: nodejs14.x
+      Environment:
+        Variables:
+          TOPIC_ARN: !Ref NotificationTopic
+          QUEUE_URL: !GetAtt NotificationQueue.QueueUrl
+
+  LambdaEventSourceMapping:
+    Type: "AWS::Lambda::EventSourceMapping"
+    DependsOn: UserNotificationLogicLambda
+    Properties:
+      BatchSize: 10
+      EventSourceArn: !GetAtt NotificationQueue.Arn
+      FunctionName: !GetAtt UserNotificationLogicLambda.FunctionArn
+      Enabled: true
+
+Outputs:
+  SnsTopicArn:
+    Description: "ARN of the SNS Topic"
+    Value: !Ref NotificationTopic
+
+  SqsQueueUrl:
+    Description: "URL of the SQS Queue"
+    Value: !GetAtt NotificationQueue.QueueUrl
+
+  LambdaFunctionArn:
+    Description: "ARN of the Lambda Function for Notifications"
+    Value: !GetAtt UserNotificationLogicLambda.Arn
