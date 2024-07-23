@@ -1,6 +1,20 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
+/**
+ * AWS Lambda function to fetch booking details from DynamoDB and calculate the duration of stay.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "bookingId": "string"  // Booking ID
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the booking ID.
+ *
+ * Returns:
+ *   object: A response object with the room number, duration of stay, and a fulfillment text message.
+ */
 exports.handler = async (event) => {
     try {
         const parameters = event;
@@ -46,6 +60,15 @@ exports.handler = async (event) => {
     }
 };
 
+/**
+ * Fetch booking details from the DynamoDB "Bookings" table.
+ *
+ * Args:
+ *   bookingId (string): The booking ID.
+ *
+ * Returns:
+ *   object|null: The booking details object if found, otherwise null.
+ */
 async function fetchBookingDetails(bookingId) {
     const params = {
         TableName: 'Bookings',

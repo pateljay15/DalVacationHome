@@ -1,6 +1,39 @@
 const AWS = require('aws-sdk');
 const lambda = new AWS.Lambda();
 
+/**
+ * AWS Lambda handler function to process incoming events from a chatbot and invoke other Lambda functions based on intent.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "body": {
+ *     "queryResult": {
+ *       "parameters": {
+ *         "Email": "string",
+ *         "BookingReferenceCode": "string",
+ *         "Issue": "string"
+ *       },
+ *       "intent": {
+ *         "displayName": "string"
+ *       }
+ *     },
+ *     "originalDetectIntentRequest": {
+ *       "payload": {
+ *         "data": {
+ *           "userRole": "string"
+ *         }
+ *       }
+ *     }
+ *   }
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the body with intent and parameters.
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains the fulfillment text
+ *           or an error message if the operation fails.
+ */
 exports.handler = async (event) => {
   try {
     let body;
@@ -66,6 +99,19 @@ exports.handler = async (event) => {
   }
 };
 
+/**
+ * Invoke another AWS Lambda function with the specified parameters.
+ *
+ * Args:
+ *   functionName (string): The name of the Lambda function to invoke.
+ *   parameters (object): The parameters to pass to the Lambda function.
+ *
+ * Returns:
+ *   object: The response payload from the invoked Lambda function.
+ *
+ * Throws:
+ *   Error: If there is an error invoking the Lambda function.
+ */
 async function invokeLambda(functionName, parameters) {
   const params = {
     FunctionName: functionName,
@@ -85,6 +131,15 @@ async function invokeLambda(functionName, parameters) {
   }
 }
 
+/**
+ * Create a response object with the specified fulfillment text.
+ *
+ * Args:
+ *   fulfillmentText (string): The fulfillment text to include in the response.
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body containing the fulfillment text.
+ */
 function createResponse(fulfillmentText) {
   return {
     statusCode: 200,

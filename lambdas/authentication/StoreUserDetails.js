@@ -1,6 +1,25 @@
 const AWS = require("aws-sdk");
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
+/**
+ * AWS Lambda function to register a new user by storing their details in DynamoDB.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "email": "string",
+ *   "name": "string",
+ *   "role": "string",
+ *   "securityAnswer": "string",
+ *   "shiftKey": "string"
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing user details.
+ *
+ * Returns:
+ *   object: A response object with a status code and a body. The body contains a success message if the user is registered successfully,
+ *           or an error message if any required fields are missing or an error occurs during registration.
+ */
 exports.handler = async (event) => {
   const { email, name, role, securityAnswer, shiftKey } = event;
 

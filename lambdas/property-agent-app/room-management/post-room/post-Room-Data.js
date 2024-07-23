@@ -13,6 +13,35 @@ const dynamo = DynamoDBDocumentClient.from(client);
 
 const tableName = "Rooms";
 
+/**
+ * AWS Lambda function to add a new room to the DynamoDB "Rooms" table and upload the room's image to S3.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "body": JSON.stringify({
+ *     "roomid": "string",
+ *     "roomNumber": "string",
+ *     "price": "number",
+ *     "discount": "number",
+ *     "image": "base64String",
+ *     "fileName": "string",
+ *     "roomType": "string",
+ *     "availability": "boolean",
+ *     "description": "string",
+ *     "features": "array",
+ *     "comments": "array",
+ *     "propertyAgent": "string"
+ *   })
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the body with room details.
+ *   context (object): The context object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains a success message
+ *           or an error message if the operation fails.
+ */
 export const handler = async (event, context) => {
   let body;
   let statusCode = 200;

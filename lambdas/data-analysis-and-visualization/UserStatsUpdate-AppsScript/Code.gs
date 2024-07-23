@@ -1,3 +1,14 @@
+/**
+ * Fetch user data and login statistics from an API and populate Google Sheets with the data.
+ *
+ * This function performs the following steps:
+ * 1. Fetches data from a specified API endpoint.
+ * 2. Parses the JSON response.
+ * 3. Opens a Google Spreadsheet by its ID.
+ * 4. Clears any existing data in the "UserSheet" and "LogSheet" sheets.
+ * 5. Populates the "UserSheet" with user data.
+ * 6. Populates the "LogSheet" with login statistics data.
+ */
 function fetchUserData() {
   var url = 'https://auidgx4717.execute-api.us-east-1.amazonaws.com/dev/userStats';
   var options = {

@@ -10,6 +10,25 @@ const dynamo = DynamoDBDocumentClient.from(client);
 
 const tableName = "Bookings";
 
+
+/**
+ * AWS Lambda function to retrieve bookings for a customer based on their email.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "pathParameters": {
+ *     "key": "string"  // Customer email
+ *   }
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the path parameters.
+ *   context (object): The context object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains the bookings for the customer
+ *           or an error message if the customer does not exist or an error occurs during retrieval.
+ */
 export const handler = async (event, context) => {
   let body;
   let fetchBookings;

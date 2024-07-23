@@ -10,6 +10,29 @@ const dynamo = DynamoDBDocumentClient.from(client);
 const bookingsTable = "Bookings";
 const roomsTable = "Rooms";
 
+/**
+ * AWS Lambda function to process customer feedback and update room and booking records.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "body": JSON.stringify({
+ *     "feedbackid": "string",
+ *     "customerName": "string",
+ *     "customerEmail": "string",
+ *     "feedbackText": "string",
+ *     "roomid": "string",
+ *     "bookingid": "string"
+ *   })
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the body with feedback and booking details.
+ *   context (object): The context object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains a success message
+ *           or an error message if the feedback processing or database updates fail.
+ */
 export const handler = async (event, context) => {
   const apiUrl = 'https://us-central1-dalvacationhome-429314.cloudfunctions.net/extract-sentiment';
   

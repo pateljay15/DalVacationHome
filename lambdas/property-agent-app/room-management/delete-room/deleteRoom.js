@@ -13,6 +13,24 @@ const dynamo = DynamoDBDocumentClient.from(client);
 
 const tableName = "Rooms";
 
+/**
+ * AWS Lambda function to delete a room and its associated image from S3.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "pathParameters": {
+ *     "roomid": "string"
+ *   }
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the path parameters.
+ *   context (object): The context object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains a success message
+ *           or an error message if the deletion fails.
+ */
 exports.handler = async (event, context) => {
   let body;
   let statusCode = 200;
