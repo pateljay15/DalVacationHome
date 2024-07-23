@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 
 const RoomCard = ({ room, onDelete, onEdit }) => {
   const navigate = useNavigate();
-  const auth = getAuthenticationToken()
-  const role = auth?.auth?.payload["custom:role"]
+  const auth = getAuthenticationToken();
+  const role = auth?.auth?.payload["custom:role"];
 
   const handleViewDetails = () => {
     navigate(`/rooms/${room.roomid}`);
@@ -35,7 +35,7 @@ const RoomCard = ({ room, onDelete, onEdit }) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
-          });
+        });
       } else {
         toast.error("Failed to delete room", {
           position: "top-right",
@@ -46,7 +46,7 @@ const RoomCard = ({ room, onDelete, onEdit }) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
-          });
+        });
       }
     } catch (error) {
       console.error("Error deleting room:", error);
@@ -64,15 +64,15 @@ const RoomCard = ({ room, onDelete, onEdit }) => {
       <p className="text-gray-700">{room.price} per night</p>
       <button
         onClick={handleViewDetails}
-        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-1"
       >
         View Details
       </button>
       {role == "1" && (
         <>
           <button
-          onClick={() => onEdit(room)}
-          className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => onEdit(room)}
+            className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-1"
           >
             Update
           </button>
@@ -84,8 +84,6 @@ const RoomCard = ({ room, onDelete, onEdit }) => {
           </button>
         </>
       )}
-      
-      
     </div>
   );
 };

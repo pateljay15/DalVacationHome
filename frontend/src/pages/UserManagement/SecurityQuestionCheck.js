@@ -95,7 +95,7 @@ const SecurityQuestionCheck = () => {
         <div className="flex justify-between items-center mb-4">
           <button
             type="button"
-            className="text-blue-500 hover:underline"
+            className="text-white"
             onClick={() => navigate("/")}
           >
             Home Page

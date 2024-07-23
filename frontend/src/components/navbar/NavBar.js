@@ -123,15 +123,15 @@ function NavBar() {
                 Signup
               </span>
               {showSignupOptions && (
-                <div className="absolute top-full mt-2 bg-white shadow-lg rounded-lg py-2 w-48 z-10">
+                <div className="absolute top-full mt-2 bg-white shadow-lg rounded-lg w-32 z-10 py-1">
                   <button
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                    className="block px-4 py-2 text-white w-full text-left mb-1"
                     onClick={handleUserRegistration}
                   >
                     User Signup
                   </button>
                   <button
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                    className="block px-4 py-2 text-white w-full text-left"
                     onClick={handlePropertyAgentRegistration}
                   >
                     Property Agent Signup

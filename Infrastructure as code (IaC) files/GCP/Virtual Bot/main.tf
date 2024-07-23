@@ -432,6 +432,63 @@ resource "google_dialogflow_intent" "welcome_intent" {
   }
 }
 
+resource "google_dialogflow_intent" "guest_booking_info_intent" {
+  display_name = "Booking Info Intent"
+  depends_on   = [google_dialogflow_agent.guest_agent]
+
+  training_phrases {
+    parts {
+      text = "BH123456"
+    }
+    parts {
+      text = "Room number?"
+    }
+    parts {
+      text = "What's my room number?"
+    }
+    parts {
+      text = "This is my booking reference code BH123456. Could you please fetch me my booking details?"
+    }
+  }
+
+  messages {
+    text {
+      text = [
+        "You need to login or register to know the booking details. Please visit the login or registration page to proceed."
+      ]
+    }
+  }
+}
+
+
+resource "google_dialogflow_intent" "guest_customer_support_request_intent" {
+  display_name = "Customer Support Request Intent"
+  depends_on   = [google_dialogflow_agent.guest_agent]
+
+  training_phrases {
+    parts {
+      text = "Can I get connected to an agent? I am having trouble with booking a room. My booking reference is BH557834."
+    }
+    parts {
+      text = "Please connect me to an agent. This is my booking code: BH123456"
+    }
+    parts {
+      text = "I need to talk to an agent"
+    }
+    parts {
+      text = "I would like to get connected with an agent"
+    }
+  }
+
+  messages {
+    text {
+      text = [
+        "You need to login or register to connect with an agent. Please visit the login or registration page to proceed."
+      ]
+    }
+  }
+}
+
 resource "google_dialogflow_intent" "booking_info_intent" {
   display_name = "Booking Info Intent"
   depends_on   = [google_dialogflow_agent.vacbot_agent]
