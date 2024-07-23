@@ -221,19 +221,6 @@ Resources:
       MemorySize: 128
       Timeout: 30
 
-  PostAuthenticationLoggingFunction:
-    Type: 'AWS::Lambda::Function'
-    Properties:
-      FunctionName: PostAuthenticationLoggingFunction
-      Handler: index.handler
-      Role: arn:aws:iam::843898296640:role/LabRole
-      Code:
-        S3Bucket: dalvacationhome-lambdas
-        S3Key: post-authentication-logging.zip
-      Runtime: nodejs20.x
-      MemorySize: 128
-      Timeout: 30
-
   GetBookingByBookingIDFunction:
     Type: 'AWS::Lambda::Function'
     Properties:
