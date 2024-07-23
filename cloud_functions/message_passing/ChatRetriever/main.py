@@ -8,6 +8,28 @@ db = firestore.Client()
 @functions_framework.http
 @cross_origin()
 def ChatRetriever(request):
+    """
+    HTTP Cloud Function to retrieve chat issues based on customer or agent email.
+
+    This function can be called with either a JSON body or URL query parameters.
+    It expects one of the following formats:
+    
+    JSON body:
+    {
+        "customerEmail": "string",
+        "agentEmail": "string"
+    }
+    
+    URL query parameters:
+    ?customerEmail=string&agentEmail=string
+
+    Args:
+        request (flask.Request): The HTTP request object containing JSON data or query parameters.
+
+    Returns:
+        flask.Response: A JSON response containing the list of issues associated with the given email.
+    """
+
     request_json = request.get_json(silent=True)
     request_args = request.args
 

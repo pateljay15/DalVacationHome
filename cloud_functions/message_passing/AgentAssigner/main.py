@@ -10,6 +10,13 @@ db = firestore.Client()
 
 # Function to fetch admin names and emails from the API endpoint
 def fetch_admins():
+    """
+    Fetch admin names and emails from the API endpoint.
+    
+    Returns:
+        list: A list of dictionaries containing admin details, or an empty list if an error occurs.
+    """
+
     url = "https://bnnk8ocuma.execute-api.us-east-1.amazonaws.com/v1/fetchAdmins"
     try:
         response = requests.get(url)
@@ -23,6 +30,13 @@ def fetch_admins():
 # Triggered from a message on a Cloud Pub/Sub topic.
 @functions_framework.cloud_event
 def hello_pubsub(cloud_event):
+    """
+    Triggered from a message on a Cloud Pub/Sub topic.
+    
+    Args:
+        cloud_event (google.cloud.functions.CloudEvent): The CloudEvent object containing Pub/Sub message data.
+    """
+
     pubsub_data = base64.b64decode(cloud_event.data["message"]["data"]).decode('utf-8')
     
     try:

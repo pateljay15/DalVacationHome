@@ -1,6 +1,16 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
+/**
+ * AWS Lambda function to fetch users with the role of 'Property Agent' (role code '1') from the DynamoDB 'Users' table.
+ *
+ * Args:
+ *   event (object): The event object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, and a body containing the list of admins
+ *           or an error message if the data fetch fails.
+ */
 exports.handler = async (event) => {
     const params = {
         TableName: 'Users', // Ensure 'Users' is the correct table name

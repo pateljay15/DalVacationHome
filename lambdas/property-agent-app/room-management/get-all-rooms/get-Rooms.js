@@ -13,6 +13,20 @@ const dynamo = DynamoDBDocumentClient.from(client);
 
 const tableName = "Rooms";
 
+/**
+ * AWS Lambda function to scan and retrieve all items from the "Rooms" DynamoDB table.
+ *
+ * This function does not expect any specific input in the event and will scan the entire
+ * "Rooms" table to fetch the data.
+ *
+ * Args:
+ *   event (object): The event object (not used in this function).
+ *   context (object): The context object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains the list of rooms
+ *           or an error message if the data fetch fails.
+ */
 export const handler = async (event, context) => {
   let body;
   let statusCode = 200;

@@ -4,6 +4,27 @@ import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 const client = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(client);
 
+
+/**
+ * AWS Lambda function to store login statistics in DynamoDB.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "body": {
+ *     "email": "string",
+ *     "date": "string",
+ *     "time": "string",
+ *     "action": "string"
+ *   }
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the body with login details.
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains the updated login history
+ *           or an error message if the update fails.
+ */
 export const handler = async (event) => {
   let body;
 

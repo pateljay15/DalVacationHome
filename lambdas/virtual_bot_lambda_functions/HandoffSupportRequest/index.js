@@ -2,6 +2,18 @@ const { PubSub } = require('@google-cloud/pubsub');
 const AWS = require('aws-sdk');
 const secretsManager = new AWS.SecretsManager();
 
+/**
+ * Retrieve Google Cloud credentials from AWS Secrets Manager.
+ *
+ * Args:
+ *   secretName (string): The name of the secret in AWS Secrets Manager.
+ *
+ * Returns:
+ *   object: The parsed credentials object.
+ *
+ * Throws:
+ *   Error: If there is an error retrieving the secret.
+ */
 async function getGoogleCloudCredentials(secretName) {
     try {
         const secret = await secretsManager.getSecretValue({ SecretId: secretName }).promise();
@@ -12,6 +24,16 @@ async function getGoogleCloudCredentials(secretName) {
     }
 }
 
+/**
+ * Publish a message to a Google Cloud Pub/Sub topic.
+ *
+ * Args:
+ *   topicNameOrId (string): The name or ID of the Pub/Sub topic.
+ *   data (string): The message data to publish.
+ *
+ * Throws:
+ *   Error: If there is an error publishing the message.
+ */
 async function publishMessage(topicNameOrId, data) {
     const dataBuffer = Buffer.from(data);
     const secretName = 'dalvachome-secrets'; 
@@ -47,6 +69,18 @@ async function publishMessage(topicNameOrId, data) {
     }
 }
 
+/**
+ * AWS Lambda handler function to process incoming events, fetch credentials, and publish messages to Google Cloud Pub/Sub.
+ *
+ * Args:
+ *   event (object): The event object containing issue, booking reference code, and email.
+ *
+ * Returns:
+ *   object: A response object with a fulfillment text.
+ *
+ * Throws:
+ *   Error: If there is an error during message publication.
+ */
 exports.handler = async (event) => {
     let body;
     if (typeof event === 'string') {

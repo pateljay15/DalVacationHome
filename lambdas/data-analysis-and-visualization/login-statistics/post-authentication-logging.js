@@ -4,6 +4,27 @@ import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 const client = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(client);
 
+
+/**
+ * AWS Lambda function to store login statistics in DynamoDB.
+ *
+ * This function is triggered by a Cognito user pool event and expects an event with the following format:
+ * {
+ *   "request": {
+ *     "userAttributes": {
+ *       "email": "string",
+ *       "name": "string",
+ *       "custom:role": "string"  // Role code: "0" for Registered Customer, "1" for Property Agent
+ *     }
+ *   }
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing user attributes.
+ *
+ * Returns:
+ *   object: The original event object.
+ */
 const handler = async (event) => {
   const email = event.request.userAttributes.email;
   const name = event.request.userAttributes.name;

@@ -14,6 +14,24 @@ const dynamo = DynamoDBDocumentClient.from(client);
 
 const tableName = "Rooms";
 
+/**
+ * AWS Lambda function to retrieve a specific room based on its room ID from the DynamoDB "Rooms" table.
+ *
+ * This function expects an event with the following format:
+ * {
+ *   "pathParameters": {
+ *     "key": "string"  // Room ID
+ *   }
+ * }
+ *
+ * Args:
+ *   event (object): The event object containing the path parameters.
+ *   context (object): The context object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains the room details
+ *           or an error message if the room does not exist or the data fetch fails.
+ */
 export const handler = async (event, context) => {
   let body;
   let fetchRoom;

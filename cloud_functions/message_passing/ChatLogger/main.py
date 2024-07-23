@@ -8,6 +8,29 @@ db = firestore.Client()
 @functions_framework.http
 @cross_origin()
 def hello_http(request):
+    """
+    HTTP Cloud Function to update chats for a specific issue in Firestore.
+
+    This function expects a JSON body in the request with the following format:
+    {
+        "concernId": "string",
+        "chats": [
+            {
+                "from": "string",
+                "message": "string",
+                "timestamp": "ISO8601 string"
+            },
+            ...
+        ]
+    }
+
+    Args:
+        request (flask.Request): The HTTP request object containing JSON data.
+
+    Returns:
+        flask.Response: A JSON response indicating the result of the operation.
+    """
+    
     request_json = request.get_json(silent=True)
 
     if not request_json:

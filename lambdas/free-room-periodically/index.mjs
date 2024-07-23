@@ -11,6 +11,20 @@ const dynamo = DynamoDBDocumentClient.from(client);
 const bookingsTable = "Bookings";
 const roomsTable = "Rooms";
 
+/**
+ * AWS Lambda function to check bookings and update room availability based on the end date.
+ *
+ * This function scans the "Bookings" table, checks each booking's end date, and updates the corresponding room's availability
+ * if the current date is greater than the booking's end date.
+ *
+ * Args:
+ *   event (object): The event object (not used in this function).
+ *   context (object): The context object (not used in this function).
+ *
+ * Returns:
+ *   object: A response object with a status code, headers, and a body. The body contains a success message
+ *           or an error message if the process fails.
+ */
 export const handler = async (event, context) => {
   let body;
   let statusCode = 200;
