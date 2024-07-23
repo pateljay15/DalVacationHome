@@ -258,27 +258,26 @@ const Registration = ({ type }) => {
         <div className="flex justify-between items-center mb-4">
           <button
             type="button"
-            className="text-blue-500 hover:underline"
+            className="text-white"
             onClick={() => navigate("/")}
           >
             Home Page
           </button>
           <button
             type="button"
-            className="text-blue-500 hover:underline"
+            className="text-white"
             onClick={() => navigate(getAlternateRoute())}
           >
             {getAlternateText()}
           </button>
         </div>
         <div className="flex justify-between items-center mb-4">
-          <button
-            type="button"
-            className="text-blue-500 hover:underline"
-            onClick={() => navigate("/user/login")}
-          >
-            Already have an account? Log in
-          </button>
+          <a href="/user/login" className="text-gray-700">
+            Already have an account?{" "}
+            <span className="text-indigo-600 hover:text-indigo-700">
+              Log in
+            </span>
+          </a>
         </div>
         <button
           type="submit"
