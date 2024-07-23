@@ -66,7 +66,7 @@ const CaesarCipher = () => {
       // alert('Correct! Well done.');
       const authData = JSON.stringify(location.state);
       localStorage.setItem("auth", authData);
-      window.dispatchEvent(new Event('storage')); // Trigger storage event
+      window.dispatchEvent(new Event("storage")); // Trigger storage event
       toast.success("Successfull Authentication", {
         position: "top-right",
         autoClose: 5000,
