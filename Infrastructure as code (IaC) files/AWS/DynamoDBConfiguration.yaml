@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  BookingsTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: 'Bookings'
+      AttributeDefinitions:
+        - AttributeName: 'bookingid'
+          AttributeType: 'S'
+        - AttributeName: 'customerEmail'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'bookingid'
+          KeyType: 'HASH'
+      GlobalSecondaryIndexes:
+        - IndexName: 'customerEmail-index'
+          KeySchema:
+            - AttributeName: 'customerEmail'
+              KeyType: 'HASH'
+          Projection:
+            ProjectionType: 'ALL'
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+  LoginStatisticsTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: 'LoginStatistics'
+      AttributeDefinitions:
+        - AttributeName: 'email'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'email'
+          KeyType: 'HASH'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 3
+        WriteCapacityUnits: 1
+
+  RoomsTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: 'Rooms'
+      AttributeDefinitions:
+        - AttributeName: 'roomid'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'roomid'
+          KeyType: 'HASH'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+  UsersTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: 'Users'
+      AttributeDefinitions:
+        - AttributeName: 'email'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'email'
+          KeyType: 'HASH'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
