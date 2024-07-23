@@ -20,7 +20,7 @@ export const handler = async (event, context) => {
 
   try {
     const requestJSON = JSON.parse(event.body);
-    
+
     // Put a new item into the Bookings table
     await dynamo.send(
       new PutCommand({
@@ -36,7 +36,7 @@ export const handler = async (event, context) => {
           endDate: requestJSON.endDate,
           message: requestJSON.message,
           customerName: requestJSON.customerName,
-          customerEmail: requestJSON.customerEmail
+          customerEmail: requestJSON.customerEmail,
         },
       })
     );
