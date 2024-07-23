@@ -3,54 +3,59 @@ import "./ChatBot.css";
 import { getAuthenticationToken } from "../../services/AuthenticationServices/AuthenticationServices";
 
 const ChatBot = () => {
-  const auth = getAuthenticationToken();
-  const token = auth?.auth?.jwtToken || null;
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const updateUserRole = () => {
-      console.log("Retrieved userRole:", token);
-      
-      const postMessageToIframe = () => {
-        const iframe = document.querySelector("df-messenger iframe");
-        if (iframe && iframe.contentWindow) {
-          console.log("Posting message to iframe:", { event: "open", data: { userRole: token } });
-          iframe.contentWindow.postMessage(
-            {
-              event: "open",
-              data: { userRole: token },
-            },
-            "*"
-          );
-        } else {
-          console.log("Iframe or iframe.contentWindow is not available");
-        }
-      };
-
-      // Retry logic
-      let retries = 5;
-      const interval = setInterval(() => {
-        const iframe = document.querySelector("df-messenger iframe");
-        if (iframe && iframe.contentWindow) {
-          postMessageToIframe();
-          clearInterval(interval);
-        } else if (retries <= 0) {
-          console.log("Iframe or iframe.contentWindow is still not available after retries");
-          clearInterval(interval);
-        } else {
-          retries--;
-          console.log(`Retrying to access iframe. Remaining retries: ${retries}`);
-        }
-      }, 1000);
+    const updateToken = () => {
+      const auth = getAuthenticationToken();
+      const newToken = auth?.auth?.jwtToken || null;
+      setToken(newToken);
     };
 
-    window.addEventListener("storage", updateUserRole);
+    window.addEventListener("storage", updateToken);
 
-    // Initial user role setup
-    updateUserRole();
+    // Initial token setup
+    updateToken();
 
     return () => {
-      window.removeEventListener("storage", updateUserRole);
+      window.removeEventListener("storage", updateToken);
     };
+  }, []);
+
+  useEffect(() => {
+    const postMessageToIframe = () => {
+      const iframe = document.querySelector("df-messenger iframe");
+      if (iframe && iframe.contentWindow) {
+        console.log("Posting message to iframe:", { event: "open", data: { userRole: token } });
+        iframe.contentWindow.postMessage(
+          {
+            event: "open",
+            data: { userRole: token },
+          },
+          "*"
+        );
+      } else {
+        console.log("Iframe or iframe.contentWindow is not available");
+      }
+    };
+
+    // Retry logic
+    let retries = 5;
+    const interval = setInterval(() => {
+      const iframe = document.querySelector("df-messenger iframe");
+      if (iframe && iframe.contentWindow) {
+        postMessageToIframe();
+        clearInterval(interval);
+      } else if (retries <= 0) {
+        console.log("Iframe or iframe.contentWindow is still not available after retries");
+        clearInterval(interval);
+      } else {
+        retries--;
+        console.log(`Retrying to access iframe. Remaining retries: ${retries}`);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [token]);
 
   useEffect(() => {

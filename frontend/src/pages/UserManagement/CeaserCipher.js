@@ -64,7 +64,9 @@ const CaesarCipher = () => {
     e.preventDefault();
     if (userInput.toUpperCase() === originalText) {
       // alert('Correct! Well done.');
-      localStorage.setItem("auth", JSON.stringify(location.state));
+      const authData = JSON.stringify(location.state);
+      localStorage.setItem("auth", authData);
+      window.dispatchEvent(new Event("storage")); // Trigger storage event
       toast.success("Successfull Authentication", {
         position: "top-right",
         autoClose: 5000,
