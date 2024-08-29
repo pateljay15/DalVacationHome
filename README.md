@@ -1,6 +1,6 @@
-# DALVacationHome-18
+# DALVacationHome
 
-Welcome to the DALVacationHome-18 repository! This project involves building a comprehensive vacation home management application with various modules integrated for enhanced functionality. Below you'll find detailed information about each module, individual contributions, and the overall project setup.
+Welcome to the DALVacationHome repository! This project involves building a comprehensive vacation home management application with various modules integrated for enhanced functionality. Below you'll find detailed information about each module, individual contributions, and the overall project setup.
 
 ## Table of Contents
 - [Project Overview](#project-overview)
