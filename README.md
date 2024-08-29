@@ -17,13 +17,13 @@ Welcome to the DALVacationHome repository! This project involves building a comp
 
 ## Project Overview
 
-DALVacationHome-18 is an application designed to manage vacation home bookings, provide customer support, and analyze data. The application integrates various AWS and GCP services to deliver a robust and scalable solution.
+DALVacationHome is an application designed to manage vacation home bookings, provide customer support, and analyze data. The application integrates various AWS and GCP services to deliver a robust and scalable solution.
 
 ## Modules
 
 ### Virtual Assistant Module
 
-The Virtual Assistant Module integrates Amazon Lex V2 with Kommunicate, enhancing user interactions with advanced language analysis and speech recognition. This module enables seamless transitions between chatbots and human agents, automating repetitive tasks like room bookings and customer inquiries to improve usability and customer experience.
+The Virtual Assistant Module integrates Dialog Flow, enhancing user interactions with advanced language analysis and speech recognition. This module enables seamless transitions between chatbots and human agents, automating repetitive tasks like room bookings and customer inquiries to improve usability and customer experience.
 
 ### Message Passing Module
 
@@ -54,8 +54,8 @@ The Data Analysis & Visualization module was enhanced by adding a filter based o
 
 ## Repository Links
 
-- **GitLab Repository**: [https://git.cs.dal.ca/ovaiz/csci5410-s24-sdp-18](https://git.cs.dal.ca/ovaiz/csci5410-s24-sdp-18)
-- **Deployed Application**: [https://dalvacationhome-sdp18-3en3jcc6tq-ue.a.run.app](https://dalvacationhome-sdp18-3en3jcc6tq-ue.a.run.app)
+- **GitLab Repository**: [https://github.com/pateljay15/DalVacationHome](https://github.com/pateljay15/DalVacationHome)
+- **Deployed Application**: [https://dalvacationhome-sdp36-834568195327.us-east1.run.app](https://dalvacationhome-sdp36-834568195327.us-east1.run.app)
 
 ## Pseudocode/Algorithms
 
